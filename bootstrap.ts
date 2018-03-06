@@ -9,6 +9,8 @@ import { UserService } from './service/user';
 import { MongoDBClient } from './utils/mongodb/client';
 import './controller/home';
 import './controller/user';
+import {User} from './models/user';
+import {UserController} from './controller/user';
 
 // load everything needed to the Container
 let container = new Container();
@@ -18,8 +20,9 @@ if (process.env.NODE_ENV === 'development') {
     container.applyMiddleware(logger);
 }
 
-container.bind<MongoDBClient>(TYPES.MongoDBClient).to(MongoDBClient);
-container.bind<UserService>(TYPES.UserService).to(UserService);
+
+container.bind<MongoDBClient<User>>(TYPES.UserService).to(UserService).whenInjectedInto(UserController);
+// container.bind<UserService>(TYPES.UserService).to(UserService);
 
 // start the server
 let server = new InversifyExpressServer(container);

@@ -1,47 +1,62 @@
 import { Db, ObjectID } from 'mongodb';
-import { injectable } from 'inversify';
+import {injectable, unmanaged} from 'inversify';
 import { MongoDBConnection } from './connection';
-import { User } from '../../models/user';
 
 @injectable()
-export class MongoDBClient {
+export class MongoDBClient<T> {
   public db: Db;
+  constructor(@unmanaged() private collection: { new (...args: any[]): T; }) {
+      MongoDBConnection.getConnection((connection) => {
+          this.db = connection;
+        });
+  }
 
-  constructor() {
-    MongoDBConnection.getConnection((connection) => {
-      this.db = connection;
+  public find(filter: Object = {}) {
+      return new Promise<T[]>((resolve, reject) => {
+          this.db.collection(this.collection.name.toLowerCase()).find(filter).toArray((error, find) => {
+            this.result(error, find, resolve, reject);
+          });
+      });
+  }
+
+  public findOneById(objectId: string): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+        this.db.collection(this.collection.name.toLowerCase()).find({_id: new ObjectID(objectId)}).limit(1).toArray((error, find) => {
+          this.result(error, find[0], resolve, reject);
+        });
     });
   }
 
-  public find(collection: string, filter: Object, result: (error, data) => void): void {
-    this.db.collection(collection).find(filter).toArray((error, find) => {
-      return result(error, find);
+  public insert(model: T): Promise<T> {
+      return new Promise<T>((resolve, reject) => {
+          this.db.collection(this.collection.name.toLowerCase()).insertOne(model, (error, insert) => {
+            this.result(error, model, resolve, reject);
+          });
+      });
+  }
+
+  public update(objectId: string, model: T): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      this.db.collection(this.collection.name.toLowerCase()).updateOne(
+        { _id: new ObjectID(objectId) },
+        { $set: model },
+        (error, update) => this.result(error, model, resolve, reject).bind(this)
+      );
     });
   }
 
-  public findOneById(collection: string, objectId: string, result: (error, data) => void): void {
-    this.db.collection(collection).find({ _id: new ObjectID(objectId) }).limit(1).toArray((error, find) => {
-      return result(error, find[0]);
+  public remove(objectId: string): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.db.collection(this.collection.name.toLowerCase()).deleteOne({ _id: new ObjectID(objectId) }, (error, remove) => {
+         (this.result(error, remove, resolve, reject));
+      });
     });
   }
 
-  public insert(collection: string, model: User, result: (error, data) => void): void {
-    this.db.collection(collection).insertOne(model, (error, insert) => {
-      return result(error, insert.ops[0]);
-    });
-  }
-
-  public update(collection: string, objectId: string, model: User, result: (error, data) => void): void {
-    this.db.collection(collection).updateOne(
-      { _id: new ObjectID(objectId) },
-      { $set: model },
-      (error, update) => result(error, model)
-    );
-  }
-
-  public remove(collection: string, objectId: string, result: (error, data) => void): void {
-    this.db.collection(collection).deleteOne({ _id: new ObjectID(objectId) }, (error, remove) => {
-      return result(error, remove);
-    });
+  private result(err, res: any, resolve, reject ): any {
+    if (err) {
+        reject(err);
+    }
+     resolve(res);
   }
 }

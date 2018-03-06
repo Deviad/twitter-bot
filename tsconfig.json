@@ -12,7 +12,8 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "moduleResolution": "node",
-        "noUnusedLocals": true
+        "noUnusedLocals": true,
+        "noStrictGenericChecks": true
     },
     "compileOnSave": false,
     "exclude": [

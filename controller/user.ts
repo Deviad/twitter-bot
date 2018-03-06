@@ -14,26 +14,26 @@ export class UserController {
 
   @httpGet('/')
   public getUsers(): Promise<User[]> {
-    return this.userService.getUsers();
+    return this.userService.find();
   }
 
   @httpGet('/:id')
   public getUser(request: Request): Promise<User> {
-    return this.userService.getUser(request.params.id);
+    return this.userService.findOneById(request.params.id);
   }
 
   @httpPost('/')
   public newUser(request: Request): Promise<User> {
-    return this.userService.newUser(request.body);
+    return this.userService.insert(request.body);
   }
 
   @httpPut('/:id')
   public updateUser(request: Request): Promise<User> {
-    return this.userService.updateUser(request.params.id, request.body);
+    return this.userService.update(request.params.id, request.body);
   }
 
   @httpDelete('/:id')
   public deleteUser(request: Request): Promise<any> {
-    return this.userService.deleteUser(request.params.id);
+    return this.userService.remove(request.params.id);
   }
 }
