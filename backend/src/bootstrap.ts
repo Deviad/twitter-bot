@@ -14,6 +14,8 @@ import {MessageController} from './controller/MessageController';
 import {MongoDBClient} from './utils/mongodb/client';
 import {ScheduledMessage} from './eventstore/scheduledMessage';
 import {ScheduledMessageRepository} from './repository/ScheduledMessageRepository';
+import {SentMessageRepository} from './repository/SentMessageRepository';
+import {SentMessage} from './eventstore/sentMessage';
 
 // load everything needed to the Container
 let container = new Container();
@@ -27,6 +29,10 @@ if (process.env.NODE_ENV === 'development') {
 container
   .bind<MongoDBClient<ScheduledMessage>>(TAGS.ScheduledMessageRepository)
   .to(ScheduledMessageRepository).whenInjectedInto(MessageService);
+container
+  .bind<MongoDBClient<SentMessage>>(TAGS.SentMessageRepository)
+  .to(SentMessageRepository).whenInjectedInto(MessageService);
+
 container
   .bind<TwitterClient>(TAGS.TwitterClient)
   .to(TwitterClient).whenInjectedInto(MessageService);
