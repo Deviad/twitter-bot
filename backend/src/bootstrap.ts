@@ -3,16 +3,17 @@ import {InversifyExpressServer} from 'inversify-express-utils';
 import {Container} from 'inversify';
 import {makeLoggerMiddleware} from 'inversify-logger-middleware';
 import * as bodyParser from 'body-parser';
-import TYPES from './constant/types';
-import {UserService} from './service/UserService';
-import {MongoDBClient} from './utils/mongodb/client';
+import TAGS from './constant/tags';
 import './controller/home';
 import './controller/UserController';
-import {User} from './models/user';
-import {UserController} from './controller/UserController';
+// import {User} from './eventstore/user';
+// import {UserController} from './controller/UserController';
 import {MessageService} from './service/MessageService';
 import {TwitterClient} from './service/TwitterClient';
 import {MessageController} from './controller/MessageController';
+import {MongoDBClient} from './utils/mongodb/client';
+import {ScheduledMessage} from './eventstore/scheduledMessage';
+import {ScheduledMessageRepository} from './repository/ScheduledMessageRepository';
 
 // load everything needed to the Container
 let container = new Container();
@@ -23,9 +24,15 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 
-container.bind<MongoDBClient<User>>(TYPES.UserService).to(UserService).whenInjectedInto(UserController);
-container.bind<TwitterClient>(TYPES.TwitterClient).to(TwitterClient).whenInjectedInto(MessageService);
-container.bind<MessageService>(TYPES.MessageService).to(MessageService).inSingletonScope().whenInjectedInto(MessageController);
+container
+  .bind<MongoDBClient<ScheduledMessage>>(TAGS.ScheduledMessageRepository)
+  .to(ScheduledMessageRepository).whenInjectedInto(MessageService);
+container
+  .bind<TwitterClient>(TAGS.TwitterClient)
+  .to(TwitterClient).whenInjectedInto(MessageService);
+container
+  .bind<MessageService>(TAGS.MessageService)
+  .to(MessageService).inSingletonScope().whenInjectedInto(MessageController);
 // container.bind<UserService>(TYPES.UserService).to(UserService);
 
 // start the server

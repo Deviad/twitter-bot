@@ -1,17 +1,15 @@
-interface IMessage {
-  title: string;
+interface IScheduledMessage {
   message: string;
-  registeredAt: string;
+  registeredAt: number;
   toBeSentAt: number;
   _id?: string;
 }
 
-export class Message implements IMessage {
+export class ScheduledMessage implements IScheduledMessage {
   constructor(
-    public title: string,
     public message: string,
     public toBeSentAt: number,
-    public registeredAt: string,
+    public registeredAt: number,
     public _id?: string
   ) { }
 }

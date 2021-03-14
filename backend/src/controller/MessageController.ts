@@ -1,14 +1,14 @@
 import * as express from 'express';
 import {controller, httpPost, request, response} from 'inversify-express-utils';
 import {inject} from 'inversify';
-import TYPES from '../constant/types';
+import TAGS from '../constant/tags';
 import {MessageService} from '../service/MessageService';
 import {ISendMessageCommand} from '../ui/command/SendMessageCommand';
 
 @controller('/message')
 export class MessageController {
 
-  constructor( @inject(TYPES.MessageService) private messageService: MessageService) { }
+  constructor( @inject(TAGS.MessageService) private messageService: MessageService) { }
 
   // @httpGet('/')
   // public async getUsers(@request() req: express.Request, @response() res: express.Response): Promise<User[]> {
@@ -31,10 +31,10 @@ export class MessageController {
   @httpPost('/')
   public async postMesage(@request() req: express.Request, @response() res: express.Response): Promise<any> {
     try {
-
       const body: ISendMessageCommand = req.body;
+      this.messageService.scheduleMessage(body);
+      res.status(200).json({ message: 'message scheduled'});
 
-      return await this.messageService.scheduleMessage(body);
     } catch (err) {
       res.status(400).json({ error: err.message });
     }
