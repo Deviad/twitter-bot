@@ -1,8 +1,8 @@
 import * as express from 'express';
-import { interfaces, controller, httpGet, httpPost, httpPut, httpDelete, request, queryParam, response, requestParam } from 'inversify-express-utils';
-import { inject } from 'inversify';
-import { User } from '../models/user';
-import { UserService } from '../service/user';
+import {controller, httpDelete, httpGet, httpPost, httpPut, request, response} from 'inversify-express-utils';
+import {inject} from 'inversify';
+import {User} from '../models/user';
+import {UserService} from '../service/UserService';
 import TYPES from '../constant/types';
 
 @controller('/user')

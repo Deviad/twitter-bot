@@ -13,7 +13,9 @@
         "experimentalDecorators": true,
         "moduleResolution": "node",
         "noUnusedLocals": true,
-        "noStrictGenericChecks": true
+        "noStrictGenericChecks": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true
     },
     "compileOnSave": false,
     "exclude": [
