@@ -20,47 +20,54 @@ export class MessageService {
 
     // todo: use date coming from gui
     try {
-      const newDate = dayjs().add(10, 's');
+      const newDate = dayjs(Date.now()).add(5, 's');
 
       const saveScheduledMessage = () => {
         return this.scMsgRepository.insert({
           message: message,
-          registeredAt: dayjs().toDate().getUTCMilliseconds(),
-          toBeSentAt: newDate.toDate().getUTCMilliseconds(),
+          registeredAt: Date.now(),
+          toBeSentAt: Date.now() + 5000,
         });
       };
-      const sendMessageToTwitter = (sm: ScheduledMessage) => {
-        return schedule.scheduleJob(newDate.toDate(), () => {
-          this.tc.postMessage(sm.message)
-            .then(() => {
-              return this.sentMsgRepository.insert({
-                _id: sm._id,
-                message,
-                sentAt: dayjs().toDate().getUTCMilliseconds()
-              });
-            })
-            .then((savedSentMessage) => {
-              return this.scMsgRepository.remove(savedSentMessage._id);
-            })
-            .catch(error => console.log(error.message));
-        });
+
+
+      const handleMessage = (sm: ScheduledMessage) => {
+        return this.tc.postMessage(sm.message)
+          .then(() => {
+            console.log('miseriaccia');
+            return this.sentMsgRepository.insert({
+              _id: sm._id,
+              message,
+              sentAt: Date.now()
+            });
+          })
+          .then((savedSentMessage) => {
+            return this.scMsgRepository.remove(savedSentMessage._id);
+          })
+          .catch(error => console.log(error));
       };
-      // promise.all([saveScheduledMessage(), sendMessageToTwitter()])
-      //   .catch(error => {
-      //     console.log(error);
-      //   });
-      saveScheduledMessage()
+
+      const sendMessageToTwitter = (sm: ScheduledMessage) => new Promise((resolve, reject) => {
+        schedule.scheduleJob(newDate.toDate(), () => {
+          try {
+            resolve(handleMessage(sm));
+          } catch (error) {
+            reject(error);
+          }
+        });
+      });
+
+
+      return saveScheduledMessage()
         .then((result) => {
-          console.log('hello!');
-          return Promise.all([result, sendMessageToTwitter(result)]);
-
+          return sendMessageToTwitter(result);
         })
-      ;
-
+        .catch(error => {
+          console.log('the error is: ', error);
+        });
 
     } catch (error) {
-      return error;
+      console.log(error);
     }
   }
-
 }

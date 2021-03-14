@@ -28,14 +28,14 @@ if (process.env.NODE_ENV === 'development') {
 
 container
   .bind<MongoDBClient<ScheduledMessage>>(TAGS.ScheduledMessageRepository)
-  .to(ScheduledMessageRepository).whenInjectedInto(MessageService);
+  .to(ScheduledMessageRepository).inSingletonScope().whenInjectedInto(MessageService);
 container
   .bind<MongoDBClient<SentMessage>>(TAGS.SentMessageRepository)
-  .to(SentMessageRepository).whenInjectedInto(MessageService);
+  .to(SentMessageRepository).inSingletonScope().whenInjectedInto(MessageService);
 
 container
   .bind<TwitterClient>(TAGS.TwitterClient)
-  .to(TwitterClient).whenInjectedInto(MessageService);
+  .to(TwitterClient).inSingletonScope().whenInjectedInto(MessageService);
 container
   .bind<MessageService>(TAGS.MessageService)
   .to(MessageService).inSingletonScope().whenInjectedInto(MessageController);
