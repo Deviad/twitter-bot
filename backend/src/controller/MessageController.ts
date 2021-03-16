@@ -32,11 +32,14 @@ export class MessageController {
   public async postMesage(@request() req: express.Request, @response() res: express.Response): Promise<any> {
     try {
       const body: ISendMessageCommand = req.body;
-      this.messageService.scheduleMessage(body);
-      res.status(200).json({ message: 'message scheduled'});
+      await this.messageService.scheduleMessage({message: body.message, response: res, date: ''});
 
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      if (res.headersSent) {
+        throw err;
+      } else {
+        res.status(500).json({ error: err.message });
+      }
     }
   }
 

@@ -5,16 +5,29 @@ import { MongoDBConnection } from './connection';
 @injectable()
 export class MongoDBClient<T> {
   public db: Db;
+
+  private static result(err, res: any, resolve, reject ): any {
+    if (err) {
+        reject(err);
+    } else {
+      resolve(res);
+    }
+
+  }
   constructor(@unmanaged() private collection: { new (...args: any[]): T; }) {
       MongoDBConnection.getConnection((connection) => {
           this.db = connection;
         });
   }
 
-  public find(filter: Object = {}) {
+  public find(filter: Object = {}, {skip, limit}: {skip?: number, limit?: number} = {skip: null, limit: null}) {
       return new Promise<T[]>((resolve, reject) => {
-          this.db.collection(this.collection.name.toLowerCase()).find(filter).toArray((error, find) => {
-            this.result(error, find, resolve, reject);
+          this.db.collection(this.collection.name.toLowerCase())
+            .find(filter)
+            .skip(skip)
+            .limit(limit)
+            .toArray((error, find) => {
+            MongoDBClient.result(error, find, resolve, reject);
           });
       });
   }
@@ -22,7 +35,7 @@ export class MongoDBClient<T> {
   public findOneById(objectId: string): Promise<T> {
     return new Promise<T>((resolve, reject) => {
         this.db.collection(this.collection.name.toLowerCase()).find({_id: new ObjectID(objectId)}).limit(1).toArray((error, find) => {
-          this.result(error, find[0], resolve, reject);
+          MongoDBClient.result(error, find[0], resolve, reject);
         });
     });
   }
@@ -30,7 +43,7 @@ export class MongoDBClient<T> {
   public insert(model: T): Promise<T> {
       return new Promise<T>((resolve, reject) => {
           this.db.collection(this.collection.name.toLowerCase()).insertOne(model, (error, insert) => {
-            this.result(error, model, resolve, reject);
+            MongoDBClient.result(error, model, resolve, reject);
           });
       });
   }
@@ -40,7 +53,7 @@ export class MongoDBClient<T> {
       this.db.collection(this.collection.name.toLowerCase()).updateOne(
         { _id: new ObjectID(objectId) },
         { $set: model },
-        (error, update) => this.result(error, model, resolve, reject).bind(this)
+        (error, update) => MongoDBClient.result(error, model, resolve, reject).bind(this)
       );
     });
   }
@@ -48,15 +61,9 @@ export class MongoDBClient<T> {
   public remove(objectId: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.db.collection(this.collection.name.toLowerCase()).deleteOne({ _id: new ObjectID(objectId) }, (error, remove) => {
-         (this.result(error, remove, resolve, reject));
+         MongoDBClient.result(error, remove, resolve, reject);
       });
     });
   }
 
-  private result(err, res: any, resolve, reject ): any {
-    if (err) {
-        reject(err);
-    }
-     resolve(res);
-  }
 }

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {inject, injectable} from 'inversify';
 import {TwitterClient} from './TwitterClient';
 import schedule from 'node-schedule';
@@ -7,6 +8,7 @@ import {ScheduledMessageRepository} from '../repository/ScheduledMessageReposito
 import {ScheduledMessage} from '../eventstore/scheduledMessage';
 import {SentMessageRepository} from '../repository/SentMessageRepository';
 
+import express from 'express';
 
 @injectable()
 export class MessageService {
@@ -16,20 +18,46 @@ export class MessageService {
               @inject(TAGS.SentMessageRepository) private sentMsgRepository: SentMessageRepository) {
   }
 
-  public scheduleMessage = ({message, date}: { message: string, date?: string }) => {
+
+  public getScheduledMessages = ({
+                                   filter,
+                                   pageable
+                                 }: { filter?: Record<string, any>, pageable?: { skip?: number, limit?: number } }) => {
+    return this.scMsgRepository.find(filter, pageable);
+  }
+
+  public getSentMessages = ({
+                              filter,
+                              pageable
+                            }: { filter?: Record<string, any>, pageable?: { skip?: number, limit?: number } }) => {
+    return this.sentMsgRepository.find(filter, pageable);
+  }
+
+  public scheduleMessage = async ({
+                              message,
+                              response,
+                              date
+                            }: { message: string, response: express.Response, date?: string }) => {
 
     // todo: use date coming from gui
     try {
       const newDate = dayjs(Date.now()).add(5, 's');
 
-      const saveScheduledMessage = () => {
+      const saveScheduledMessage = (r: express.Response) => {
+        console.log('headers sent 1', r.headersSent);
         return this.scMsgRepository.insert({
           message: message,
           registeredAt: Date.now(),
           toBeSentAt: Date.now() + 5000,
-        });
+        })
+          .then(result =>  {
+            console.log('headers sent 2', r.headersSent);
+            return Promise.all([result, {res: r}]);
+          })
+          .catch(error => {
+            throw error;
+          });
       };
-
 
       const handleMessage = (sm: ScheduledMessage) => {
         return this.tc.postMessage(sm.message)
@@ -44,8 +72,11 @@ export class MessageService {
           .then((savedSentMessage) => {
             return this.scMsgRepository.remove(savedSentMessage._id);
           })
-          .catch(error => console.log(error));
+          .catch(error => {
+            throw error;
+          });
       };
+
 
       const sendMessageToTwitter = (sm: ScheduledMessage) => new Promise((resolve, reject) => {
         schedule.scheduleJob(newDate.toDate(), () => {
@@ -58,16 +89,18 @@ export class MessageService {
       });
 
 
-      return saveScheduledMessage()
-        .then((result) => {
-          return sendMessageToTwitter(result);
+      return await saveScheduledMessage(response)
+        .then(([mess, {res}]) => {
+          console.log('headers sent 3', response.headersSent);
+          res.json({message: 'message scheduled'});
+          return sendMessageToTwitter(mess);
         })
         .catch(error => {
-          console.log('the error is: ', error);
+          throw error;
         });
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 }

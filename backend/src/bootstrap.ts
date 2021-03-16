@@ -17,6 +17,9 @@ import {ScheduledMessageRepository} from './repository/ScheduledMessageRepositor
 import {SentMessageRepository} from './repository/SentMessageRepository';
 import {SentMessage} from './eventstore/sentMessage';
 
+// @ts-ignore
+// store apply and call
+
 // load everything needed to the Container
 let container = new Container();
 
@@ -25,20 +28,19 @@ if (process.env.NODE_ENV === 'development') {
   container.applyMiddleware(logger);
 }
 
-
 container
   .bind<MongoDBClient<ScheduledMessage>>(TAGS.ScheduledMessageRepository)
-  .to(ScheduledMessageRepository).inSingletonScope().whenInjectedInto(MessageService);
+  .to(ScheduledMessageRepository).whenInjectedInto(MessageService);
 container
   .bind<MongoDBClient<SentMessage>>(TAGS.SentMessageRepository)
-  .to(SentMessageRepository).inSingletonScope().whenInjectedInto(MessageService);
+  .to(SentMessageRepository).whenInjectedInto(MessageService);
 
 container
   .bind<TwitterClient>(TAGS.TwitterClient)
-  .to(TwitterClient).inSingletonScope().whenInjectedInto(MessageService);
+  .to(TwitterClient).whenInjectedInto(MessageService);
 container
   .bind<MessageService>(TAGS.MessageService)
-  .to(MessageService).inSingletonScope().whenInjectedInto(MessageController);
+  .to(MessageService).whenInjectedInto(MessageController);
 // container.bind<UserService>(TYPES.UserService).to(UserService);
 
 // start the server
