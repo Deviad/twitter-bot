@@ -16,7 +16,7 @@ import {ScheduledMessage} from './eventstore/scheduledMessage';
 import {ScheduledMessageRepository} from './repository/ScheduledMessageRepository';
 import {SentMessageRepository} from './repository/SentMessageRepository';
 import {SentMessage} from './eventstore/sentMessage';
-import {MessageServiceScheduleHandler} from "./service/MessageServiceScheduleHandler";
+import {MessageServiceScheduleHandler} from './service/MessageServiceScheduleHandler';
 
 // @ts-ignore
 // store apply and call
