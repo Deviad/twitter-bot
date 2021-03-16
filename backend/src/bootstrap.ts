@@ -16,6 +16,7 @@ import {ScheduledMessage} from './eventstore/scheduledMessage';
 import {ScheduledMessageRepository} from './repository/ScheduledMessageRepository';
 import {SentMessageRepository} from './repository/SentMessageRepository';
 import {SentMessage} from './eventstore/sentMessage';
+import {MessageServiceScheduleHandler} from "./service/MessageServiceScheduleHandler";
 
 // @ts-ignore
 // store apply and call
@@ -35,9 +36,24 @@ container
   .bind<MongoDBClient<SentMessage>>(TAGS.SentMessageRepository)
   .to(SentMessageRepository).whenInjectedInto(MessageService);
 
+
+container
+  .bind<MessageServiceScheduleHandler>(TAGS.MessageServiceScheduleHandler)
+  .to(MessageServiceScheduleHandler).whenInjectedInto(MessageService);
+
+
+container
+  .bind<MongoDBClient<ScheduledMessage>>(TAGS.ScheduledMessageRepository)
+  .to(ScheduledMessageRepository).whenInjectedInto(MessageServiceScheduleHandler);
+container
+  .bind<MongoDBClient<SentMessage>>(TAGS.SentMessageRepository)
+  .to(SentMessageRepository).whenInjectedInto(MessageServiceScheduleHandler);
+
 container
   .bind<TwitterClient>(TAGS.TwitterClient)
-  .to(TwitterClient).whenInjectedInto(MessageService);
+  .to(TwitterClient).whenInjectedInto(MessageServiceScheduleHandler);
+
+
 container
   .bind<MessageService>(TAGS.MessageService)
   .to(MessageService).whenInjectedInto(MessageController);
@@ -58,3 +74,5 @@ app.listen(3000);
 console.log('Server started on port 3000 :)');
 
 exports = module.exports = app;
+
+
