@@ -29,17 +29,13 @@ export class MessageController {
   // }
 
   @httpPost('/')
-  public async postMesage(@request() req: express.Request, @response() res: express.Response): Promise<any> {
+  public async postMessage(@request() req: express.Request, @response() res: express.Response): Promise<any> {
     try {
       const body: ISendMessageCommand = req.body;
       await this.messageService.sendMessage({message: body.message, response: res, date: ''});
 
     } catch (err) {
-      if (res.headersSent) {
-        throw err;
-      } else {
         res.status(500).json({ error: err.message });
-      }
     }
   }
 
