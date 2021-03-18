@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {CalendarModule} from 'primeng/calendar';
 import {ButtonModule} from 'primeng/button';
+import {TabViewModule} from 'primeng/tabview';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import {ButtonModule} from 'primeng/button';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    TabViewModule,
     InputTextareaModule,
     CalendarModule,
     ButtonModule

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ITweet, TwitService} from '@src/app/twit.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {InputTextareaModule} from 'primeng/inputtextarea';
 
 @Component({
     selector: 'app-home',
@@ -21,7 +20,6 @@ export class HomeComponent implements OnInit {
 
      validateMessage(c: FormControl) {
         const MESSAGE_REGEX = new RegExp('.{3,}');
-
 
         console.log('TEST', MESSAGE_REGEX.test(c.value));
 

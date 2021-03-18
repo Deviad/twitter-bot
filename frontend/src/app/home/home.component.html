@@ -1,29 +1,37 @@
-<form [formGroup]="tweetForm"
-      class="ui form"
-      [class.error]="!tweetForm.valid && tweetForm.touched">
-    <div class="p-d-flex p-flex-column p-ai-center">
-        <div class="p-d-flex p-flex-column p-ai-left">
-           <div class=" p-mb-2">
-               <div>
-                   <label class=" p-mb-2" for="message">Message</label>
-               </div>
-               <div>
-                   <textarea id="message" pInputTextarea [formControl]="tweetForm.controls['message']"></textarea>
-               </div>
-           </div>
-           <div class="p-mb-2">
-             <div>
-                 <label for="scheduledDate">Scheduled Date</label><br/>
-             </div>
-             <div>
-                 <p-calendar id="scheduledDate" [formControl]="tweetForm.controls['scheduledDate']" dateFormat="dd.mm.yy"></p-calendar>
-             </div>
-           </div>
-           <p-button label="Click"
-                     (click)="!tweetForm.pristine &&
+<p-tabView>
+    <p-tabPanel header="Scheduler">
+        <form [formGroup]="tweetForm">
+            <div class="p-d-flex p-flex-column p-ai-center">
+                <div class="p-d-flex p-flex-column p-ai-start form-elements">
+                    <div>
+                        <H3>Schedule your message</H3>
+                    </div>
+                    <div class="p-mb-2">
+                        <div>
+                            <label class=" p-mb-2" for="message">Message</label>
+                        </div>
+                        <div>
+                            <textarea id="message" pInputTextarea [formControl]="tweetForm.controls['message']"></textarea>
+                        </div>
+                    </div>
+                    <div class="p-mb-2">
+                        <div>
+                            <label for="scheduledDate">Scheduled Date</label><br/>
+                        </div>
+                        <div>
+                            <p-calendar id="scheduledDate" [formControl]="tweetForm.controls['scheduledDate']" dateFormat="dd.mm.yy"></p-calendar>
+                        </div>
+                    </div>
+                    <p-button label="Click"
+                              (click)="!tweetForm.pristine &&
                   !tweetForm.invalid &&
                   onSubmit(tweetForm.value)" [disabled]="tweetForm.pristine || tweetForm.invalid"></p-button>
-       </div>
-    </div>
-</form>
+                </div>
+            </div>
+        </form>
+    </p-tabPanel>
+    <p-tabPanel header="Sent messages">
+        Content 2
+    </p-tabPanel>
+</p-tabView>
 
