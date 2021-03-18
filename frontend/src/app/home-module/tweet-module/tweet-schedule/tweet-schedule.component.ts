@@ -1,24 +1,25 @@
-import {Component, OnInit} from '@angular/core';
-import {ITweet, TwitService} from '@src/app/home/twit.service';
+import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ITweet, TwitService} from '@src/app/home-module/twit.service';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css'],
+  selector: 'app-tweet-schedule',
+  templateUrl: './tweet-schedule.component.html',
+  styleUrls: ['./tweet-schedule.component.css']
 })
-export class HomeComponent implements OnInit {
+export class TweetScheduleComponent implements OnInit {
+
     tweetForm: FormGroup;
     tweets: ITweet[] = [];
 
     constructor(private ts: TwitService, private fb: FormBuilder) {
         this.tweetForm = fb.group({
             'message':  ['', Validators.compose([this.validateMessage])],
-            'scheduledDate': [null, Validators.compose([])],
+            'scheduledDate': [null, Validators.required],
         });
     }
 
-     validateMessage(c: FormControl) {
+    validateMessage(c: FormControl) {
         const MESSAGE_REGEX = new RegExp('.{3,}');
 
         console.log('TEST', MESSAGE_REGEX.test(c.value));
@@ -31,7 +32,7 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-      this.refresh();
+        this.refresh();
     }
 
     refresh() {

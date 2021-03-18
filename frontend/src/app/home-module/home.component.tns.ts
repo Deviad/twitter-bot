@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ITweet, TwitService} from '@src/app/home/twit.service';
+import {ITweet, TwitService} from '@src/app/home-module/twit.service';
 
 @Component({
     selector: 'app-home',

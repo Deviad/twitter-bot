@@ -3,7 +3,7 @@ import { NativeScriptModule } from '@nativescript/angular';
 
 import { AppRoutingModule } from '@src/app/app-routing.module';
 import { AppComponent } from '@src/app/app.component';
-import { HomeComponent } from '@src/app/home/home.component';
+import { HomeComponent } from '@src/app/home-module/home.component.tns';
 import {HttpClientModule} from '@angular/common/http';
 
 
