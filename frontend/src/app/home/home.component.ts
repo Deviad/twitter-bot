@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
     }
 
     refresh() {
-        this.ts.refreshScheduledTweets().subscribe(
+        this.ts.refreshSentTweets().subscribe(
             tweets => {
                 this.tweets = tweets;
                 console.log(this.tweets);

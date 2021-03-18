@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {concat, Observable, throwError, timer} from 'rxjs';
-import {delay, mergeMap, retry, retryWhen, take} from 'rxjs/operators';
+import {Observable, timer} from 'rxjs';
+import {delay, mergeMap, retryWhen, take} from 'rxjs/operators';
 
 
 export interface ITweet {
@@ -23,11 +23,11 @@ export class TwitService {
         this.http.post(`${TwitService.BASE_URL}/message`, tweet);
     }
 
-    refreshScheduledTweets(): Observable<ITweet[]> {
-        return timer(0, 3000).pipe(mergeMap(x => {
-            return this.http.get<ITweet[]>(`${TwitService.BASE_URL}/message/scheduled`);
-        }), retryWhen(errors => errors.pipe(delay(3000), take(3))));
-    }
+    // refreshScheduledTweets(): Observable<ITweet[]> {
+    //     return timer(0, 3000).pipe(mergeMap(x => {
+    //         return this.http.get<ITweet[]>(`${TwitService.BASE_URL}/message/scheduled`);
+    //     }), retryWhen(errors => errors.pipe(delay(3000), take(3))));
+    // }
 
     refreshSentTweets(): Observable<ITweet[]> {
         return timer(0, 3000).pipe(mergeMap(x => {
@@ -35,8 +35,9 @@ export class TwitService {
         }), retryWhen(errors => errors.pipe(delay(3000), take(3))));
     }
 
-    getTweets(): Observable<ITweet[]> {
-        return this.http.get<ITweet[]>(`${TwitService.BASE_URL}/message/scheduled`);
+    getScheduledTweets(): Observable<ITweet[]> {
+        return this.http.get<ITweet[]>(`${TwitService.BASE_URL}/message/scheduled`)
+            .pipe(retryWhen(errors => errors.pipe(delay(3000), take(3))));
     }
 
 }
