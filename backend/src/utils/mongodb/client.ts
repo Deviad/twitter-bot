@@ -20,7 +20,7 @@ export class MongoDBClient<T> {
         });
   }
 
-  public find(filter: Object = {}, {skip, limit}: {skip?: number, limit?: number} = {skip: null, limit: null}) {
+  public find(filter: Object = {}, {skip, limit}: {skip?: number, limit?: number} = {skip: 0, limit: 0}) {
       return new Promise<T[]>((resolve, reject) => {
           this.db.collection(this.collection.name.toLowerCase())
             .find(filter)

@@ -1,4 +1,4 @@
-interface IScheduledMessage {
+export interface IScheduledMessage {
   message: string;
   registeredAt: number;
   toBeSentAt: number;

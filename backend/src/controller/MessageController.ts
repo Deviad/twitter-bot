@@ -1,23 +1,33 @@
 import * as express from 'express';
-import {controller, httpPost, request, response} from 'inversify-express-utils';
+import {controller, httpGet, httpPost, request, response} from 'inversify-express-utils';
 import {inject} from 'inversify';
 import TAGS from '../constant/tags';
 import {MessageService} from '../service/MessageService';
 import {ISendMessageCommand} from '../ui/command/SendMessageCommand';
+import { IScheduledMessage } from '../eventstore/scheduledMessage';
+import {ISentMessage} from "../eventstore/sentMessage";
 
 @controller('/message')
 export class MessageController {
 
   constructor( @inject(TAGS.MessageService) private messageService: MessageService) { }
 
-  // @httpGet('/')
-  // public async getUsers(@request() req: express.Request, @response() res: express.Response): Promise<User[]> {
-  //   try {
-  //     return await this.userService.find();
-  //   } catch (err) {
-  //     res.status(400).json({ error: err.message });
-  //   }
-  // }
+  @httpGet('/scheduled')
+  public async getScheduled(@request() req: express.Request, @response() res: express.Response): Promise<IScheduledMessage[]> {
+    try {
+      return await this.messageService.getScheduledMessages({});
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+  @httpGet('/sent')
+  public async getSent(@request() req: express.Request, @response() res: express.Response): Promise<ISentMessage[]> {
+    try {
+      return await this.messageService.getSentMessages({});
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
 
   // @httpGet('/:id')
   // public async getUser(@request() req: express.Request, @response() res: express.Response): Promise<User> {

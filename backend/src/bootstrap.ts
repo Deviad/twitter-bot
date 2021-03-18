@@ -3,6 +3,7 @@ import {InversifyExpressServer} from 'inversify-express-utils';
 import {Container} from 'inversify';
 import {makeLoggerMiddleware} from 'inversify-logger-middleware';
 import * as bodyParser from 'body-parser';
+import cors from 'cors';
 import TAGS from './constant/tags';
 import './controller/home';
 import './controller/UserController';
@@ -62,6 +63,7 @@ container
 // start the server
 let server = new InversifyExpressServer(container);
 server.setConfig((application) => {
+  application.use(cors());
   application.use(bodyParser.urlencoded({
     extended: true
   }));
@@ -70,8 +72,8 @@ server.setConfig((application) => {
 });
 
 let app = server.build();
-app.listen(3000);
-console.log('Server started on port 3000 :)');
+app.listen(3001);
+console.log('Server started on port 3001 :)');
 
 exports = module.exports = app;
 

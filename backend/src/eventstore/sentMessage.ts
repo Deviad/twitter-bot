@@ -1,4 +1,4 @@
-interface ISentMessage {
+export interface ISentMessage {
   message: string;
   sentAt: number;
   _id?: string;
