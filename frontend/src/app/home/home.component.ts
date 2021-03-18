@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ITweet, TwitService} from '@src/app/twit.service';
+import {ITweet, TwitService} from '@src/app/home/twit.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
