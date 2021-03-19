@@ -5,7 +5,8 @@ import TAGS from '../constant/tags';
 import {MessageService} from '../service/MessageService';
 import {ISendMessageCommand} from '../ui/command/SendMessageCommand';
 import { IScheduledMessage } from '../eventstore/scheduledMessage';
-import {ISentMessage} from "../eventstore/sentMessage";
+import {ISentMessage} from '../eventstore/sentMessage';
+import {hasText} from '../utils';
 
 @controller('/message')
 export class MessageController {
@@ -15,55 +16,40 @@ export class MessageController {
   @httpGet('/scheduled')
   public async getScheduled(@request() req: express.Request, @response() res: express.Response): Promise<IScheduledMessage[]> {
     try {
-      return await this.messageService.getScheduledMessages({});
+      return await this.messageService.getScheduledMessages({pageable: {order: -1, key: 'registeredAt'}});
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
   }
+
   @httpGet('/sent')
   public async getSent(@request() req: express.Request, @response() res: express.Response): Promise<ISentMessage[]> {
     try {
       return await this.messageService.getSentMessages({});
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
   }
-
-  // @httpGet('/:id')
-  // public async getUser(@request() req: express.Request, @response() res: express.Response): Promise<User> {
-  //   try {
-  //     return await this.userService.findOneById(req.params.id);
-  //   } catch (err) {
-  //     res.status(400).json({ error: err.message });
-  //   }
-  // }
 
   @httpPost('/')
   public async postMessage(@request() req: express.Request, @response() res: express.Response): Promise<any> {
     try {
       const body: ISendMessageCommand = req.body;
-      await this.messageService.sendMessage({message: body.message, response: res, date: ''});
+      const MESSAGE_REGEX = new RegExp('.{3,}');
+
+
+      if (!hasText(req.body.message) || !MESSAGE_REGEX.test(req.body.message)) {
+        throw new Error('the message provided is not valid');
+      }
+
+      if (isNaN(req.body?.date)) {
+        throw new Error('Date should be time in milliseconds');
+      }
+
+      await this.messageService.sendMessage({message: body.message, response: res, date: body.date});
 
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
   }
-
-  // @httpPut('/:id')
-  // public async updateUser(@request() req: express.Request, @response() res: express.Response): Promise<User> {
-  //   try {
-  //     return await this.userService.update(req.params.id, req.body);
-  //   } catch (err) {
-  //     res.status(400).json({ error: err.message });
-  //   }
-  // }
-
-  // @httpDelete('/:id')
-  // public async deleteUser(@request() req: express.Request, @response() res: express.Response): Promise<any> {
-  //   try {
-  //     return await this.userService.remove(req.params.id);
-  //   } catch (err) {
-  //     res.status(400).json({ error: err.message });
-  //   }
-  // }
 }

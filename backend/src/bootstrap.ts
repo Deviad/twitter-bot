@@ -52,7 +52,7 @@ container
 
 container
   .bind<TwitterClient>(TAGS.TwitterClient)
-  .to(TwitterClient).whenInjectedInto(MessageServiceScheduleHandler);
+  .to(TwitterClient).inSingletonScope().whenInjectedInto(MessageServiceScheduleHandler);
 
 
 container

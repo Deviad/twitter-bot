@@ -1,7 +1,4 @@
-
-
-
 export interface ISendMessageCommand {
   message: string;
-  date?: string;
+  date: number;
 }

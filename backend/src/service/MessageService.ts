@@ -10,38 +10,41 @@ import {MessageServiceScheduleHandler} from './MessageServiceScheduleHandler';
 @injectable()
 export class MessageService {
 
-  constructor(@inject(TAGS.MessageServiceScheduleHandler) private messageHandler: MessageServiceScheduleHandler,
-              @inject(TAGS.ScheduledMessageRepository) private scMsgRepository: ScheduledMessageRepository,
-              @inject(TAGS.SentMessageRepository) private sentMsgRepository: SentMessageRepository) {
-  }
-
-
-  public getScheduledMessages = ({
-                                   filter,
-                                   pageable
-                                 }: { filter?: Record<string, any>, pageable?: { skip?: number, limit?: number } }) => {
-    return this.scMsgRepository.find(filter, pageable);
-  }
-
-  public getSentMessages = ({
-                              filter,
-                              pageable
-                            }: { filter?: Record<string, any>, pageable?: { skip?: number, limit?: number } }) => {
-    return this.sentMsgRepository.find(filter, pageable);
-  }
-
-
-  public sendMessage = async ({
-                                message,
-                                response,
-                                date
-                              }: { message: string, response: express.Response, date?: string }) => {
-
-    try {
-      await this.messageHandler.handleMessageProcessing({message, response, date});
-    } catch (error) {
-      throw error;
+    constructor(@inject(TAGS.MessageServiceScheduleHandler) private messageHandler: MessageServiceScheduleHandler,
+                @inject(TAGS.ScheduledMessageRepository) private scMsgRepository: ScheduledMessageRepository,
+                @inject(TAGS.SentMessageRepository) private sentMsgRepository: SentMessageRepository) {
     }
 
-  }
+
+    public getScheduledMessages = ({
+                                       filter,
+                                       pageable
+                                   }: {
+        filter?: Record<string, any>,
+        pageable?: { skip?: number, limit?: number, key?: string, order?: 1 | -1 }
+    }) => {
+        return this.scMsgRepository.find(filter, pageable);
+    }
+
+    public getSentMessages = ({
+                                  filter,
+                                  pageable
+                              }: { filter?: Record<string, any>, pageable?: { skip?: number, limit?: number } }) => {
+        return this.sentMsgRepository.find(filter, pageable);
+    }
+
+
+    public sendMessage = async ({
+                                    message,
+                                    response,
+                                    date
+                                }: { message: string, response: express.Response, date?: number }) => {
+
+        try {
+            await this.messageHandler.handleMessageProcessing({message, response, date});
+        } catch (error) {
+            throw error;
+        }
+
+    }
 }

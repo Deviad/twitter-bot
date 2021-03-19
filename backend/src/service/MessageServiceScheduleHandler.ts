@@ -21,7 +21,7 @@ export class MessageServiceScheduleHandler {
                                     message,
                                     response,
                                     date
-                                  }: { message: string, response: express.Response, date?: string }) => {
+                                  }: { message: string, response: express.Response, date?: number }) => {
 
     // todo: use date coming from gui
     try {
@@ -29,7 +29,7 @@ export class MessageServiceScheduleHandler {
         .then(([mess, {res}]) => {
           console.log('headers sent 3', response.headersSent);
           res.json({message: 'message scheduled'});
-          return this.sendMessageToTwitter(mess);
+          return this.sendMessageToTwitter(mess, date);
         })
         .catch(error => {
           throw error;
@@ -72,7 +72,7 @@ export class MessageServiceScheduleHandler {
       });
   }
 
-  public sendMessageToTwitter = (sm: ScheduledMessage) => new Promise((resolve, reject) => {
+  public sendMessageToTwitter = (sm: ScheduledMessage, date) => new Promise((resolve, reject) => {
     const newDate = dayjs(Date.now()).add(5, 's');
     schedule.scheduleJob(newDate.toDate(), () => {
       try {
@@ -82,6 +82,5 @@ export class MessageServiceScheduleHandler {
       }
     });
   })
-
 
 }

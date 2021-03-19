@@ -31,13 +31,12 @@ export class TwitService {
     constructor(private http: HttpClient) {
     }
 
-    saveTweet(tweet: ITweetCommand): void {
-        this.http.post(`${TwitService.BASE_URL}/message`, JSON.stringify(tweet), {
+    saveTweet(tweet: ITweetCommand): Observable<Object> {
+       return this.http.post(`${TwitService.BASE_URL}/message`, JSON.stringify(tweet), {
             headers: {
                 'Content-Type': 'application/json'
             }
-        })
-            .subscribe();
+        });
     }
 
     refreshScheduledTweets(): Observable<IScheduledTweet[]> {
@@ -69,7 +68,16 @@ export class TwitService {
     }
 
     getScheduledTweets(): Observable<IScheduledTweet[]> {
-        return this.http.get<IScheduledTweet[]>(`${TwitService.BASE_URL}/message/scheduled`)
+        return this.http.get<any[]>(`${TwitService.BASE_URL}/message/scheduled`)
+            .pipe( map(savedData => {
+                return savedData.map((value: {message, registeredAt, toBeSentAt}) => {
+                    return {
+                        message: value.message,
+                        registeredAt: dayjs(value.registeredAt).toString(),
+                        toBeSentAt: dayjs(value.toBeSentAt).toString()
+                    } as IScheduledTweet;
+                });
+            }))
             .pipe(retryWhen(errors => errors.pipe(delay(3000), take(3))));
     }
 
