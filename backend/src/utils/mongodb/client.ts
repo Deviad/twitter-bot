@@ -21,14 +21,14 @@ export class MongoDBClient<T> {
         });
     }
 
-    public find(filter: Object = {}, {skip, limit, key, order}:
+    public find(filter: Object = {}, {skip = 0, limit = 0, key, order = 1}:
         { skip?: number, limit?: number, key?: string, order?: 1 | -1 } = {skip: 0, limit: 0, order: 1}) {
         return new Promise<T[]>((resolve, reject) => {
             this.db.collection(this.collection.name.toLowerCase())
                 .find(filter)
                 .skip(skip)
                 .limit(limit)
-                .sort({[key]: order})
+                .sort(key && {[key]: order})
                 .toArray((error, find) => {
                     MongoDBClient.result(error, find, resolve, reject);
                 });
