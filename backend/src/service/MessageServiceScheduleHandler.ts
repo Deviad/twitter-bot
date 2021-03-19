@@ -6,7 +6,6 @@ import {ScheduledMessageRepository} from '../repository/ScheduledMessageReposito
 import {SentMessageRepository} from '../repository/SentMessageRepository';
 import {ScheduledMessage} from '../eventstore/scheduledMessage';
 import schedule from 'node-schedule';
-import dayjs from 'dayjs';
 
 @injectable()
 export class MessageServiceScheduleHandler {
@@ -25,7 +24,7 @@ export class MessageServiceScheduleHandler {
 
     // todo: use date coming from gui
     try {
-      return await this.saveScheduledMessage(response, message)
+      return await this.saveScheduledMessage(response, message, date)
         .then(([mess, {res}]) => {
           console.log('headers sent 3', response.headersSent);
           res.json({message: 'message scheduled'});
@@ -56,12 +55,12 @@ export class MessageServiceScheduleHandler {
       });
   }
 
-   public saveScheduledMessage = (r: express.Response, message: string) => {
+   public saveScheduledMessage = (r: express.Response, message: string, date: number) => {
     console.log('headers sent 1', r.headersSent);
     return this.scMsgRepository.insert({
       message: message,
       registeredAt: Date.now(),
-      toBeSentAt: Date.now() + 5000,
+      toBeSentAt: date,
     })
       .then(result =>  {
         console.log('headers sent 2', r.headersSent);
@@ -73,8 +72,8 @@ export class MessageServiceScheduleHandler {
   }
 
   public sendMessageToTwitter = (sm: ScheduledMessage, date) => new Promise((resolve, reject) => {
-    const newDate = dayjs(Date.now()).add(5, 's');
-    schedule.scheduleJob(newDate.toDate(), () => {
+    const newDate = new Date(date);
+    schedule.scheduleJob(newDate, () => {
       try {
         resolve(this.handleMessageDeliveryPhase(sm));
       } catch (error) {

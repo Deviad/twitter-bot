@@ -9,7 +9,11 @@
                     <label class=" p-mb-2" for="message">Message</label>
                 </div>
                 <div>
-                    <textarea id="message" pInputTextarea [formControl]="tweetForm.controls['message']"></textarea>
+                    <textarea
+                            id="message"
+                            pInputTextarea
+                            [formControl]="tweetForm.controls['message']">
+                    </textarea>
                 </div>
             </div>
             <div class="p-mb-2 p-d-flex p-flex-column">
@@ -17,7 +21,12 @@
                     <label for="scheduledDate">Scheduled Date</label><br/>
                 </div>
                 <div>
-                    <p-calendar id="scheduledDate" [formControl]="tweetForm.controls['scheduledDate']" dateFormat="dd.mm.yy"></p-calendar>
+                    <p-calendar
+                            id="scheduledDate"
+                            [formControl]="tweetForm.controls['scheduledDate']"
+                            dateFormat="dd.mm.yy"
+                            showTime="true" hourFormat="24">
+                    </p-calendar>
                 </div>
             </div>
             <p-button label="Click"
