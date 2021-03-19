@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ITweet, TwitService} from '@src/app/home-module/twit.service';
+import {IScheduledTweet, TwitService} from '@src/app/home-module/tweet-module/twit.service';
+import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'app-tweet-schedule',
@@ -10,7 +11,7 @@ import {ITweet, TwitService} from '@src/app/home-module/twit.service';
 export class TweetScheduleComponent implements OnInit {
 
     tweetForm: FormGroup;
-    tweets: ITweet[] = [];
+    tweets: IScheduledTweet[] = [];
 
     constructor(private ts: TwitService, private fb: FormBuilder) {
         this.tweetForm = fb.group({
@@ -36,7 +37,7 @@ export class TweetScheduleComponent implements OnInit {
     }
 
     refresh() {
-        this.ts.refreshSentTweets().subscribe(
+        this.ts.refreshScheduledTweets().subscribe(
             tweets => {
                 this.tweets = tweets;
                 console.log(this.tweets);
@@ -47,7 +48,8 @@ export class TweetScheduleComponent implements OnInit {
         );
     }
 
-    onSubmit(value: any): void {
-        console.log('you submitted value:', value);
+    onSubmit({message, date}: {message: string, date: string}): void {
+        console.log('you submitted value:', {message, date});
+        this.ts.saveTweet({message, date: dayjs(date).valueOf()});
     }
 }

@@ -7,13 +7,15 @@ import {TweetScheduleComponent} from '@src/app/home-module/tweet-module/tweet-sc
 import {TweetTabComponent} from './tweet-tab/tweet-tab.component';
 import {TabViewModule} from 'primeng/tabview';
 import {SharedModule} from '@src/app/shared.module';
-
+import {TableModule} from 'primeng/table';
+import {TweetSentComponent} from '@src/app/home-module/tweet-module/tweet-sent/tweet-sent.component';
 
 
 @NgModule({
     declarations: [
         TweetTabComponent,
         TweetScheduleComponent,
+        TweetSentComponent,
     ],
     imports: [
         CommonModule,
@@ -21,7 +23,8 @@ import {SharedModule} from '@src/app/shared.module';
         CalendarModule,
         ButtonModule,
         TabViewModule,
-        SharedModule
+        SharedModule,
+        TableModule
     ],
     bootstrap: [TweetTabComponent],
     exports: [TweetTabComponent, CommonModule]

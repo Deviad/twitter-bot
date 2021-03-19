@@ -30,6 +30,7 @@
     "@nativescript/core": "^7.3.0",
     "@nativescript/theme": "~3.0.0",
     "core-js": "^3.8.0",
+    "dayjs": "^1.10.4",
     "module": "^1.2.5",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",

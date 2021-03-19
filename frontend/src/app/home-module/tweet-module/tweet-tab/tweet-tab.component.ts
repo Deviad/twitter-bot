@@ -5,11 +5,8 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './tweet-tab.component.html',
   styleUrls: ['./tweet-tab.component.css']
 })
-export class TweetTabComponent implements OnInit {
+export class TweetTabComponent  {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

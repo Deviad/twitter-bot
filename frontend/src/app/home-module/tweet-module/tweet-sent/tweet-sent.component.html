@@ -1,0 +1,17 @@
+<div>
+    <h3>List of sent messages</h3>
+</div>
+<p-table [value]="tweets">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Message</th>
+            <th>Sent At</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-tweet>
+        <tr>
+            <td>{{tweet.message}}</td>
+            <td>{{tweet.sentAt}}</td>
+        </tr>
+    </ng-template>
+</p-table>
