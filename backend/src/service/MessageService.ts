@@ -29,7 +29,8 @@ export class MessageService {
     public getSentMessages = ({
                                   filter,
                                   pageable
-                              }: { filter?: Record<string, any>, pageable?: { skip?: number, limit?: number } }) => {
+                              }: { filter?: Record<string, any>, pageable?:
+            { skip?: number, limit?: number, key?: string, order?: 1 | -1 } }) => {
         return this.sentMsgRepository.find(filter, pageable);
     }
 

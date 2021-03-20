@@ -19,8 +19,6 @@ import {SentMessageRepository} from './repository/SentMessageRepository';
 import {SentMessage} from './eventstore/sentMessage';
 import {MessageServiceScheduleHandler} from './service/MessageServiceScheduleHandler';
 
-// @ts-ignore
-// store apply and call
 
 // load everything needed to the Container
 let container = new Container();

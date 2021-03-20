@@ -3,6 +3,9 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, timer} from 'rxjs';
 import {delay, map, mergeMap, retryWhen, take} from 'rxjs/operators';
 import * as dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 
 export interface ITweetCommand {
@@ -26,10 +29,11 @@ export interface ISentTweet {
 })
 export class TwitService {
 
-    public static BASE_URL = 'http://localhost:3001';
-
     constructor(private http: HttpClient) {
     }
+
+    public static BASE_URL = 'http://localhost:3001';
+    public static FORMAT = 'DD/MM/YYYY hh:mm:ss A';
 
     saveTweet(tweet: ITweetCommand): Observable<Object> {
        return this.http.post(`${TwitService.BASE_URL}/message`, JSON.stringify(tweet), {
@@ -43,11 +47,12 @@ export class TwitService {
         return timer(0, 3000).pipe(mergeMap(x => {
             return this.http.get<any[]>(`${TwitService.BASE_URL}/message/scheduled`)
                 .pipe( map(savedData => {
-                    return savedData.map((value: {message, registeredAt, toBeSentAt}) => {
+                    return savedData.map(({message, registeredAt, toBeSentAt}:
+                                              {message: string, registeredAt: number, toBeSentAt: number}) => {
                         return {
-                            message: value.message,
-                            registeredAt: dayjs(value.registeredAt).toString(),
-                            toBeSentAt: dayjs(value.toBeSentAt).toString()
+                            message: message,
+                            registeredAt: dayjs.utc(registeredAt).local().format(TwitService.FORMAT),
+                            toBeSentAt: dayjs(toBeSentAt).local().format(TwitService.FORMAT)
                         } as IScheduledTweet;
                     });
                 }));
@@ -57,10 +62,10 @@ export class TwitService {
     refreshSentTweets(): Observable<ISentTweet[]> {
         return timer(0, 3000).pipe(mergeMap(x => {
             return this.http.get<any[]>(`${TwitService.BASE_URL}/message/sent`).pipe(map(savedData => {
-                return savedData.map((value: {message, sentAt}) => {
+                return savedData.map(({message, sentAt}: {message: string, sentAt: number}) => {
                     return {
-                        message: value.message,
-                        sentAt: dayjs(value.sentAt).toString()
+                        message: message,
+                        sentAt: dayjs(sentAt).local().format(TwitService.FORMAT)
                     } as ISentTweet;
                 });
             }));
@@ -70,11 +75,12 @@ export class TwitService {
     getScheduledTweets(): Observable<IScheduledTweet[]> {
         return this.http.get<any[]>(`${TwitService.BASE_URL}/message/scheduled`)
             .pipe( map(savedData => {
-                return savedData.map((value: {message, registeredAt, toBeSentAt}) => {
+                return savedData.map(({message, registeredAt, toBeSentAt}:
+                                          {message: string, registeredAt: number, toBeSentAt: number}) => {
                     return {
-                        message: value.message,
-                        registeredAt: dayjs(value.registeredAt).toString(),
-                        toBeSentAt: dayjs(value.toBeSentAt).toString()
+                        message: message,
+                        registeredAt: dayjs(registeredAt).local().format(TwitService.FORMAT),
+                        toBeSentAt: dayjs(toBeSentAt).local().format(TwitService.FORMAT)
                     } as IScheduledTweet;
                 });
             }))

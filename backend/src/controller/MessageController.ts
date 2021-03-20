@@ -25,7 +25,7 @@ export class MessageController {
   @httpGet('/sent')
   public async getSent(@request() req: express.Request, @response() res: express.Response): Promise<ISentMessage[]> {
     try {
-      return await this.messageService.getSentMessages({});
+      return await this.messageService.getSentMessages({pageable: {order: -1, key: 'sentAt'}});
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
