@@ -1,6 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {ITweetCommand, TwitService} from '@src/app/home-module/tweet-module/twit.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component} from '@angular/core';
 
 @Component({
     selector: 'app-home',

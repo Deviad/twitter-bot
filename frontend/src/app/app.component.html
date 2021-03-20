@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+<ng-template [ngIf]="loggedIn">
+    <div>
+        <button type="button" (click)="logOut()" class="btn btn-primary">Log Out</button>
+    </div>
+    <router-outlet></router-outlet>
+</ng-template>
+<ng-template [ngIf]="!loggedIn">
+    <button type="button" (click)="loginWithGoogle()" class="btn btn-danger">Login with Google</button>
+</ng-template>
