@@ -16,7 +16,10 @@ export class MessageController {
   @httpGet('/scheduled')
   public async getScheduled(@request() req: express.Request, @response() res: express.Response): Promise<IScheduledMessage[]> {
     try {
-      return await this.messageService.getScheduledMessages({pageable: {order: -1, key: 'registeredAt'}});
+
+      console.log('REQ IS', req);
+      const token = req.headers?.authorization.replace('Bearer ', '');
+      return await this.messageService.getScheduledMessages({pageable: {order: -1, key: 'registeredAt'}}, token);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -25,7 +28,8 @@ export class MessageController {
   @httpGet('/sent')
   public async getSent(@request() req: express.Request, @response() res: express.Response): Promise<ISentMessage[]> {
     try {
-      return await this.messageService.getSentMessages({pageable: {order: -1, key: 'sentAt'}});
+      const token = req.headers?.authorization.replace('Bearer ', '');
+      return await this.messageService.getSentMessages({pageable: {order: -1, key: 'sentAt'}}, token);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -45,8 +49,9 @@ export class MessageController {
       if (isNaN(req.body?.date)) {
         throw new Error('Date should be time in milliseconds');
       }
+      const token = req.headers?.authorization.replace('Bearer ', '');
 
-      await this.messageService.sendMessage({message: body.message, response: res, date: body.date});
+      await this.messageService.sendMessage({message: body.message, response: res, date: body.date}, token);
 
     } catch (err) {
         res.status(500).json({ error: err.message });

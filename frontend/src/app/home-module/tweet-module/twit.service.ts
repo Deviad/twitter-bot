@@ -35,17 +35,22 @@ export class TwitService {
     public static BASE_URL = 'http://localhost:3001';
     public static FORMAT = 'DD/MM/YYYY hh:mm:ss A';
 
-    saveTweet(tweet: ITweetCommand): Observable<Object> {
+    saveTweet(tweet: ITweetCommand, token: string): Observable<Object> {
        return this.http.post(`${TwitService.BASE_URL}/message`, JSON.stringify(tweet), {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         });
     }
 
-    refreshScheduledTweets(): Observable<IScheduledTweet[]> {
+    refreshScheduledTweets(token: string): Observable<IScheduledTweet[]> {
         return timer(0, 3000).pipe(mergeMap(x => {
-            return this.http.get<any[]>(`${TwitService.BASE_URL}/message/scheduled`)
+            return this.http.get<any[]>(`${TwitService.BASE_URL}/message/scheduled`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .pipe( map(savedData => {
                     return savedData.map(({message, registeredAt, toBeSentAt}:
                                               {message: string, registeredAt: number, toBeSentAt: number}) => {
@@ -59,9 +64,13 @@ export class TwitService {
         }), retryWhen(errors => errors.pipe(delay(3000), take(3))));
     }
 
-    refreshSentTweets(): Observable<ISentTweet[]> {
+    refreshSentTweets(token: string): Observable<ISentTweet[]> {
         return timer(0, 3000).pipe(mergeMap(x => {
-            return this.http.get<any[]>(`${TwitService.BASE_URL}/message/sent`).pipe(map(savedData => {
+            return this.http.get<any[]>(`${TwitService.BASE_URL}/message/sent`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).pipe(map(savedData => {
                 return savedData.map(({message, sentAt}: {message: string, sentAt: number}) => {
                     return {
                         message: message,
@@ -72,8 +81,12 @@ export class TwitService {
         }), retryWhen(errors => errors.pipe(delay(3000), take(3))));
     }
 
-    getScheduledTweets(): Observable<IScheduledTweet[]> {
-        return this.http.get<any[]>(`${TwitService.BASE_URL}/message/scheduled`)
+    getScheduledTweets(token: string): Observable<IScheduledTweet[]> {
+        return this.http.get<any[]>(`${TwitService.BASE_URL}/message/scheduled`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .pipe( map(savedData => {
                 return savedData.map(({message, registeredAt, toBeSentAt}:
                                           {message: string, registeredAt: number, toBeSentAt: number}) => {

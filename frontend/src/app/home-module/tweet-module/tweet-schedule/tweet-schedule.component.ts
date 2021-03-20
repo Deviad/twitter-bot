@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {IScheduledTweet, TwitService} from '@src/app/home-module/tweet-module/twit.service';
 import * as dayjs from 'dayjs';
-import {concatMap} from 'rxjs/operators';
+import {concatMap, tap} from 'rxjs/operators';
+import {SocialAuthService} from 'angularx-social-login';
 
 @Component({
     selector: 'app-tweet-schedule',
@@ -13,8 +14,9 @@ export class TweetScheduleComponent implements OnInit {
 
     tweetForm: FormGroup;
     tweets: IScheduledTweet[] = [];
+    idToken: string;
 
-    constructor(private ts: TwitService, private fb: FormBuilder) {
+    constructor(private ts: TwitService, private fb: FormBuilder, private authService: SocialAuthService) {
         this.tweetForm = fb.group({
             'message': ['', Validators.compose([this.validateMessage])],
             'scheduledDate': [null, Validators.required],
@@ -34,11 +36,17 @@ export class TweetScheduleComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.refresh();
+        this.authService.authState.pipe(tap(auth => {
+           if (auth && auth.idToken) {
+               console.log('AUTH IS: ', auth);
+               this.idToken = auth.idToken;
+               this.refresh(auth.idToken);
+           }
+        })).subscribe();
     }
 
-    refresh() {
-        this.ts.refreshScheduledTweets().subscribe(
+    refresh(token: string) {
+        this.ts.refreshScheduledTweets(token).subscribe(
             tweets => {
                 this.tweets = tweets;
                 console.log(this.tweets);
@@ -49,11 +57,11 @@ export class TweetScheduleComponent implements OnInit {
         );
     }
 
-    onSubmit({message, date}: { message: string, date: string }): void {
+    onSubmit({message, scheduledDate: date}: { message: string, scheduledDate: string }, token: string): void {
         console.log('you submitted value:', {message, date});
         this.ts
-            .saveTweet({message, date: dayjs(date).valueOf()})
-            .pipe(concatMap(() => this.ts.getScheduledTweets()))
+            .saveTweet({message, date: dayjs(date).valueOf()}, token)
+            .pipe(concatMap(() => this.ts.getScheduledTweets(this.idToken)))
             .subscribe(  tweets => {
                     this.tweets = tweets;
                     console.log(this.tweets);

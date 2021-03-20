@@ -32,7 +32,7 @@
             <p-button label="Click"
                       (click)="!tweetForm.pristine &&
                   !tweetForm.invalid &&
-                  onSubmit(tweetForm.value)" [disabled]="tweetForm.pristine || tweetForm.invalid"></p-button>
+                  onSubmit(tweetForm.value, idToken)" [disabled]="tweetForm.pristine || tweetForm.invalid"></p-button>
         </div>
     </div>
 </form>

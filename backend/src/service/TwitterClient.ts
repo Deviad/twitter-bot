@@ -7,8 +7,8 @@ import Twit from 'twitter-lite';
 export class TwitterClient {
   private twit: Twit;
   constructor() {
-    console.log(JSON.stringify(config));
-    this.init(config);
+    // @ts-ignore
+    this.init(config.twitter);
   }
 
   public postMessage = async (message: string) => {

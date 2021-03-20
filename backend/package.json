@@ -18,6 +18,7 @@
     "cors": "^2.8.5",
     "dayjs": "^1.10.4",
     "express": "4.17.1",
+    "google-auth-library": "^7.0.2",
     "helmet": "4.4.1",
     "inversify": "5.0.5",
     "inversify-binding-decorators": "4.0.0",

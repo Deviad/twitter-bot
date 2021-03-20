@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {IScheduledTweet, ISentTweet, TwitService} from '@src/app/home-module/tweet-module/twit.service';
-import * as dayjs from 'dayjs';
+import {ISentTweet, TwitService} from '@src/app/home-module/tweet-module/twit.service';
+import {tap} from 'rxjs/operators';
+import {SocialAuthService} from 'angularx-social-login';
 
 @Component({
   selector: 'app-tweet-sent',
@@ -11,17 +11,22 @@ import * as dayjs from 'dayjs';
 export class TweetSentComponent implements OnInit {
 
     tweets: ISentTweet[] = [];
+    idToken: string;
 
-    constructor(private ts: TwitService) {
+    constructor(private ts: TwitService, private authService: SocialAuthService) {
     }
 
 
     ngOnInit() {
-        this.refresh();
+        this.authService.authState.pipe(tap(auth => {
+            if (auth && auth.idToken) {
+                this.idToken = auth.idToken;
+                this.refresh(auth.idToken);
+            }
+        })).subscribe();
     }
-
-    refresh() {
-        this.ts.refreshSentTweets().subscribe(
+    refresh(token: string) {
+        this.ts.refreshSentTweets(token).subscribe(
             tweets => {
                 this.tweets = tweets;
                 console.log(this.tweets);

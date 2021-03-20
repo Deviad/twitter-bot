@@ -18,55 +18,61 @@ import {ScheduledMessageRepository} from './repository/ScheduledMessageRepositor
 import {SentMessageRepository} from './repository/SentMessageRepository';
 import {SentMessage} from './eventstore/sentMessage';
 import {MessageServiceScheduleHandler} from './service/MessageServiceScheduleHandler';
+import {TokenVerifier} from './service/TokenVerifier';
 
 
 // load everything needed to the Container
 let container = new Container();
 
 if (process.env.NODE_ENV === 'development') {
-  let logger = makeLoggerMiddleware();
-  container.applyMiddleware(logger);
+    let logger = makeLoggerMiddleware();
+    container.applyMiddleware(logger);
 }
 
 container
-  .bind<MongoDBClient<ScheduledMessage>>(TAGS.ScheduledMessageRepository)
-  .to(ScheduledMessageRepository).whenInjectedInto(MessageService);
+    .bind<MongoDBClient<ScheduledMessage>>(TAGS.ScheduledMessageRepository)
+    .to(ScheduledMessageRepository).whenInjectedInto(MessageService);
 container
-  .bind<MongoDBClient<SentMessage>>(TAGS.SentMessageRepository)
-  .to(SentMessageRepository).whenInjectedInto(MessageService);
-
-
-container
-  .bind<MessageServiceScheduleHandler>(TAGS.MessageServiceScheduleHandler)
-  .to(MessageServiceScheduleHandler).whenInjectedInto(MessageService);
+    .bind<MongoDBClient<SentMessage>>(TAGS.SentMessageRepository)
+    .to(SentMessageRepository).whenInjectedInto(MessageService);
 
 
 container
-  .bind<MongoDBClient<ScheduledMessage>>(TAGS.ScheduledMessageRepository)
-  .to(ScheduledMessageRepository).whenInjectedInto(MessageServiceScheduleHandler);
-container
-  .bind<MongoDBClient<SentMessage>>(TAGS.SentMessageRepository)
-  .to(SentMessageRepository).whenInjectedInto(MessageServiceScheduleHandler);
-
-container
-  .bind<TwitterClient>(TAGS.TwitterClient)
-  .to(TwitterClient).inSingletonScope().whenInjectedInto(MessageServiceScheduleHandler);
+    .bind<MessageServiceScheduleHandler>(TAGS.MessageServiceScheduleHandler)
+    .to(MessageServiceScheduleHandler).whenInjectedInto(MessageService);
 
 
 container
-  .bind<MessageService>(TAGS.MessageService)
-  .to(MessageService).whenInjectedInto(MessageController);
+    .bind<MongoDBClient<ScheduledMessage>>(TAGS.ScheduledMessageRepository)
+    .to(ScheduledMessageRepository).whenInjectedInto(MessageServiceScheduleHandler);
+container
+    .bind<MongoDBClient<SentMessage>>(TAGS.SentMessageRepository)
+    .to(SentMessageRepository).whenInjectedInto(MessageServiceScheduleHandler);
+
+container
+    .bind<TwitterClient>(TAGS.TwitterClient)
+    .to(TwitterClient).inSingletonScope().whenInjectedInto(MessageServiceScheduleHandler);
+
+
+container
+    .bind<MessageService>(TAGS.MessageService)
+    .to(MessageService).whenInjectedInto(MessageController);
+
+container
+    .bind<TokenVerifier>(TAGS.TokenVerifier)
+    .to(TokenVerifier).whenInjectedInto(MessageService);
+
 // container.bind<UserService>(TYPES.UserService).to(UserService);
 
 // start the server
 let server = new InversifyExpressServer(container);
 server.setConfig((application) => {
-  application.use(cors());
-  application.use(bodyParser.urlencoded({
-    extended: true
-  }));
-  application.use(bodyParser.json());
-  // application.use(helmet());
+    application.use(cors());
+    application.use(bodyParser.urlencoded({
+        extended: true
+    }));
+    application.use(bodyParser.json());
+    // application.use(helmet());
 });
 
 let app = server.build();
