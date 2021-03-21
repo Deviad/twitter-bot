@@ -20,4 +20,6 @@ android {
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
   }  
+
+  flavorDimensions "default"
 } 

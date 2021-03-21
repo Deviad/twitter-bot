@@ -18,7 +18,7 @@
           "dom",
           "es6"
       ],
-      "baseUrl": ".",
+      "baseUrl": "./",
       "paths": {
           "@src/*": [
               "src/*.android.ts",
@@ -26,6 +26,10 @@
               "src/*.tns.ts",
               "src/*.web.ts",
               "src/*.ts"
+          ],
+          "@assets/*": [
+              "src/assets/*.ttf",
+              "src/assets/*.css"
           ]
       }
   }

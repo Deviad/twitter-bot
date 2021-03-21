@@ -31,7 +31,8 @@
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeflex/primeflex.css",
               "node_modules/primeicons/primeicons.css",
-              "node_modules/@fullcalendar/core/main.css"
+              "node_modules/@fullcalendar/core/main.css",
+              "node_modules/@fortawesome/fontawesome-free/css/fontawesome.css"
             ],
             "scripts": []
           },
@@ -85,7 +86,8 @@
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeflex/primeflex.css",
               "node_modules/primeicons/primeicons.css",
-              "node_modules/@fullcalendar/core/main.css"
+              "node_modules/@fullcalendar/core/main.css",
+              "node_modules/@fortawesome/fontawesome-free/css/fontawesome.css"
             ],
             "scripts": [],
             "assets": [
