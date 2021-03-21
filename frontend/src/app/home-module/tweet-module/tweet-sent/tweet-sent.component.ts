@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ISentTweet, TwitService} from '@src/app/home-module/tweet-module/twit.service';
+import {ISentTweet, TwitService} from '@src/app/shared/twit.service';
 import {tap} from 'rxjs/operators';
 import {SocialAuthService} from 'angularx-social-login';
 

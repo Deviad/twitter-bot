@@ -1,1 +1,15 @@
-<p>tweet-sent works!</p>
+<GridLayout>
+    <!--    <Label text="Settings Page" class="h2 text-center">-->
+    <!--    </Label>-->
+    <ListView [items]="getSentTweets()"
+              style="height:1250px">
+        <ng-template let-tweet>
+            <FlexboxLayout flexDirection="row">
+                <Label [text]="tweet.message" class="t-12"
+                       verticalAlignment="center" style="width: 100%"></Label>
+                <Label [text]="tweet.sentAt" class="t-12"
+                       verticalAlignment="center" style="width: 100%"></Label>
+            </FlexboxLayout>
+        </ng-template>
+    </ListView>
+</GridLayout>

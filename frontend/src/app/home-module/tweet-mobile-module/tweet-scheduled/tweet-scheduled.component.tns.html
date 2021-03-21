@@ -1,1 +1,19 @@
-<p>tweet-scheduled works!</p>
+<GridLayout>
+<!--    <Label text="Settings Page" class="h2 text-center">-->
+<!--    </Label>-->
+    <ListView [items]="getScheduledTweets()"
+              style="height:1250px">
+        <ng-template let-tweet>
+            <FlexboxLayout flexDirection="row">
+                <Label [text]="tweet.message" class="t-12"
+                       verticalAlignment="center" style="width: 100%"></Label>
+                <Label [text]="tweet.registeredAt" class="t-12"
+                       verticalAlignment="center" style="width: 100%"></Label>
+                <Label [text]="tweet.toBeSentAt" class="t-12"
+                       verticalAlignment="center" style="width: 100%"></Label>
+            </FlexboxLayout>
+        </ng-template>
+    </ListView>
+</GridLayout>
+
+

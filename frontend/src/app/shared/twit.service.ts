@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, timer} from 'rxjs';
-import {delay, map, mergeMap, retryWhen, take} from 'rxjs/operators';
+import {Observable, throwError, timer} from 'rxjs';
+import {concatMap, delay, map, mergeMap, retryWhen, take} from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import {environment} from '../../environments/environment';
 
 dayjs.extend(utc);
 
@@ -28,15 +29,17 @@ export interface ISentTweet {
     providedIn: 'root'
 })
 export class TwitService {
-
-    constructor(private http: HttpClient) {
-    }
-
-    public static BASE_URL = 'http://localhost:3001';
+    // @ts-ignore
+    public static BASE_URL = environment.apiUrl;
     public static FORMAT = 'DD/MM/YYYY hh:mm:ss A';
 
+    constructor(private http: HttpClient) {
+        console.log('BASE_URL ', TwitService.BASE_URL);
+    }
+
+
     saveTweet(tweet: ITweetCommand, token: string): Observable<Object> {
-       return this.http.post(`${TwitService.BASE_URL}/message`, JSON.stringify(tweet), {
+        return this.http.post(`${TwitService.BASE_URL}/message`, JSON.stringify(tweet), {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -51,9 +54,9 @@ export class TwitService {
                     'Authorization': `Bearer ${token}`
                 }
             })
-                .pipe( map(savedData => {
+                .pipe(map(savedData => {
                     return savedData.map(({message, registeredAt, toBeSentAt}:
-                                              {message: string, registeredAt: number, toBeSentAt: number}) => {
+                                              { message: string, registeredAt: number, toBeSentAt: number }) => {
                         return {
                             message: message,
                             registeredAt: dayjs.utc(registeredAt).local().format(TwitService.FORMAT),
@@ -61,7 +64,8 @@ export class TwitService {
                         } as IScheduledTweet;
                     });
                 }));
-        }), retryWhen(errors => errors.pipe(delay(3000), take(3))));
+        }),  retryWhen(errors => errors.pipe(delay(3000), take(3),
+            concatMap((error, index) => throwError(error)))));
     }
 
     refreshSentTweets(token: string): Observable<ISentTweet[]> {
@@ -71,14 +75,16 @@ export class TwitService {
                     'Authorization': `Bearer ${token}`
                 }
             }).pipe(map(savedData => {
-                return savedData.map(({message, sentAt}: {message: string, sentAt: number}) => {
+                return savedData.map(({message, sentAt}: { message: string, sentAt: number }) => {
                     return {
                         message: message,
                         sentAt: dayjs(sentAt).local().format(TwitService.FORMAT)
                     } as ISentTweet;
                 });
             }));
-        }), retryWhen(errors => errors.pipe(delay(3000), take(3))));
+        }), retryWhen(errors => errors.pipe(delay(3000), take(3), concatMap((error, index) => {
+            return throwError(error);
+        }))));
     }
 
     getScheduledTweets(token: string): Observable<IScheduledTweet[]> {
@@ -87,9 +93,9 @@ export class TwitService {
                 'Authorization': `Bearer ${token}`
             }
         })
-            .pipe( map(savedData => {
+            .pipe(map(savedData => {
                 return savedData.map(({message, registeredAt, toBeSentAt}:
-                                          {message: string, registeredAt: number, toBeSentAt: number}) => {
+                                          { message: string, registeredAt: number, toBeSentAt: number }) => {
                     return {
                         message: message,
                         registeredAt: dayjs(registeredAt).local().format(TwitService.FORMAT),
@@ -97,7 +103,8 @@ export class TwitService {
                     } as IScheduledTweet;
                 });
             }))
-            .pipe(retryWhen(errors => errors.pipe(delay(3000), take(3))));
+            .pipe(retryWhen(errors => errors.pipe(delay(3000), take(3),
+                concatMap((error, index) => throwError(error)))));
     }
 
 }

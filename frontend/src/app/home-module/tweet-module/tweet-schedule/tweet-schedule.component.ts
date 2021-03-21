@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {IScheduledTweet, TwitService} from '@src/app/home-module/tweet-module/twit.service';
+import {IScheduledTweet, TwitService} from '@src/app/shared/twit.service';
 import * as dayjs from 'dayjs';
 import {concatMap, tap} from 'rxjs/operators';
 import {SocialAuthService} from 'angularx-social-login';
