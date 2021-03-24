@@ -9,7 +9,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "android": "tns run android --no-hmr",
+    "android": "tns run android --no-hmr --bundle",
+    "android:dev": "tns run android --hmr --bundle",
+    "android:debug": "tns debug android --hmr --bundle",
     "ios": "tns run ios --no-hmr",
     "mobile": "tns run",
     "preview": "tns preview"
@@ -36,6 +38,7 @@
     "dayjs": "^1.10.4",
     "module": "^1.2.5",
     "nativescript-fontawesome": "^1.0.0",
+    "nativescript-google-login": "^1.4.0",
     "nativescript-ngx-fonticon": "^7.0.0",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",

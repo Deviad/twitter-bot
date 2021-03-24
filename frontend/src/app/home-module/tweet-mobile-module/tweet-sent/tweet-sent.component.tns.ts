@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TwitService} from '@src/app/shared/twit.service';
 import {TweetStoreService} from '@src/app/home-module/tweet-mobile-module/tweet-store.service';
+import {MobileAuthService} from '@src/app/mobile-auth-service';
 
 @Component({
   selector: 'app-tweet-sent',
@@ -9,7 +10,7 @@ import {TweetStoreService} from '@src/app/home-module/tweet-mobile-module/tweet-
 })
 export class TweetSentComponent implements OnInit {
 
-  constructor(private ts: TwitService, private store: TweetStoreService) {
+  constructor(private ts: TwitService, private store: TweetStoreService, private authService: MobileAuthService) {
   }
 
   ngOnInit() {
@@ -20,7 +21,7 @@ export class TweetSentComponent implements OnInit {
     //         this.refresh(auth.idToken);
     //     }
     // })).subscribe();
-    this.refresh('');
+    this.refresh(this.authService.getAuthState().idToken);
   }
 
   getSentTweets() {

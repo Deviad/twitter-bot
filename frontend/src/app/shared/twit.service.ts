@@ -4,7 +4,8 @@ import {Observable, throwError, timer} from 'rxjs';
 import {concatMap, delay, map, mergeMap, retryWhen, take} from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import {environment} from '../../environments/environment';
+// @ts-ignore
+import {environment} from '@src/environments/environment';
 
 dayjs.extend(utc);
 
@@ -48,7 +49,7 @@ export class TwitService {
     }
 
     refreshScheduledTweets(token: string): Observable<IScheduledTweet[]> {
-        return timer(0, 3000).pipe(mergeMap(x => {
+        return timer(0, 10000).pipe(mergeMap(x => {
             return this.http.get<any[]>(`${TwitService.BASE_URL}/message/scheduled`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -64,12 +65,12 @@ export class TwitService {
                         } as IScheduledTweet;
                     });
                 }));
-        }),  retryWhen(errors => errors.pipe(delay(3000), take(3),
+        }),  retryWhen(errors => errors.pipe(delay(10000), take(3),
             concatMap((error, index) => throwError(error)))));
     }
 
     refreshSentTweets(token: string): Observable<ISentTweet[]> {
-        return timer(0, 3000).pipe(mergeMap(x => {
+        return timer(0, 10000).pipe(mergeMap(x => {
             return this.http.get<any[]>(`${TwitService.BASE_URL}/message/sent`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -82,7 +83,7 @@ export class TwitService {
                     } as ISentTweet;
                 });
             }));
-        }), retryWhen(errors => errors.pipe(delay(3000), take(3), concatMap((error, index) => {
+        }), retryWhen(errors => errors.pipe(delay(10000), take(3), concatMap((error, index) => {
             return throwError(error);
         }))));
     }
@@ -103,7 +104,7 @@ export class TwitService {
                     } as IScheduledTweet;
                 });
             }))
-            .pipe(retryWhen(errors => errors.pipe(delay(3000), take(3),
+            .pipe(retryWhen(errors => errors.pipe(delay(10000), take(3),
                 concatMap((error, index) => throwError(error)))));
     }
 

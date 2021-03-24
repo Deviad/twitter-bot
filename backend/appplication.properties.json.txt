@@ -7,7 +7,8 @@
  },
 
  "googleSSO": {
-  "clientId": ""
+  "clientId": "",
+  "clientSecret": ""
  },
  "userEmail": ""
 }

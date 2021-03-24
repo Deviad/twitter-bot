@@ -120,3 +120,5 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 app.properties.json
+.gradle
+build.gradle

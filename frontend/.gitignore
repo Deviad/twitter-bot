@@ -10,7 +10,11 @@
 
 # NativeScript
 /hooks
-/platforms
+
+/platforms/android/*
+/platforms/tempPlugin/*
+!platforms/android/android-GDu3I.keystore
+
 
 # IDEs and editors
 /.idea

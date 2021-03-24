@@ -19,6 +19,7 @@ import {SentMessageRepository} from './repository/SentMessageRepository';
 import {SentMessage} from './eventstore/sentMessage';
 import {MessageServiceScheduleHandler} from './service/MessageServiceScheduleHandler';
 import {TokenVerifier} from './service/TokenVerifier';
+import {AuthController} from './controller/AuthController';
 
 
 // load everything needed to the Container
@@ -61,6 +62,10 @@ container
 container
     .bind<TokenVerifier>(TAGS.TokenVerifier)
     .to(TokenVerifier).whenInjectedInto(MessageService);
+
+container
+    .bind<TokenVerifier>(TAGS.TokenVerifier)
+    .to(TokenVerifier).whenInjectedInto(AuthController);
 
 // container.bind<UserService>(TYPES.UserService).to(UserService);
 

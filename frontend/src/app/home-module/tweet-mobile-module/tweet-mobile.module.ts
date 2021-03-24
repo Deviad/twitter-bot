@@ -6,7 +6,6 @@ import {TweetScheduledComponent} from '@src/app/home-module/tweet-mobile-module/
 import {
     NativeScriptCommonModule,
     NativeScriptFormsModule,
-    NativeScriptHttpClientModule,
     NativeScriptModule
 } from '@nativescript/angular';
 import {TNSFontIconModule} from 'nativescript-ngx-fonticon';
@@ -19,7 +18,6 @@ import {TweetStoreService} from '@src/app/home-module/tweet-mobile-module/tweet-
     imports: [
         NativeScriptCommonModule,
         NativeScriptFormsModule,
-        NativeScriptHttpClientModule,
         NativeScriptModule,
         TNSFontIconModule,
     ],
