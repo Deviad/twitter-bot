@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {IScheduledTweet, ISentTweet} from '@src/app/shared/twit.service';
-import {BehaviorSubject} from 'rxjs';
 
 @Component({
     selector: 'app-tweet-mobile-tab',

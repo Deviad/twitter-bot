@@ -1,3 +1,22 @@
-<GridLayout>
+    <ScrollView>
+        <StackLayout class="form">
+            <StackLayout class="input-field" orientation="vertical">
+                <Label text="Enter a message" class="t-14 m-l-24"
+                       verticalAlignment="center" style="width: 100%; font-weight: bold"></Label>
+                <TextView
+                    class="input"
+                    [formControl]="tweetForm.controls['message']"
+                ></TextView>
+            </StackLayout>
+            <StackLayout class="input-field m-t-24">
+                <Label text="Enter date" class="t-14 m-l-24"
+                       verticalAlignment="center" style="width: 100%; font-weight: bold"></Label>
+                <DateTimePickerFields
+                        hintDate="select date" hintTime="select time"
+                        [formControl]="tweetForm.controls['scheduledDate']"
+                ></DateTimePickerFields>
 
-</GridLayout>
+            </StackLayout>
+            <Button text="Send message" class="btn btn-primary" (tap)="onSubmit(tweetForm.value, auth.getAuthState().idToken)"></Button>
+        </StackLayout>
+    </ScrollView>

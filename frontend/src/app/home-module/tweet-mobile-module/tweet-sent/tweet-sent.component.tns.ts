@@ -14,13 +14,6 @@ export class TweetSentComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.authService.authState.pipe(tap(auth => {
-    //     if (auth && auth.idToken) {
-    //         console.log('AUTH IS: ', auth);
-    //         this.idToken = auth.idToken;
-    //         this.refresh(auth.idToken);
-    //     }
-    // })).subscribe();
     this.refresh(this.authService.getAuthState().idToken);
   }
 

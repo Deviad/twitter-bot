@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {TwitService} from '@src/app/shared/twit.service';
 import {TweetStoreService} from '@src/app/home-module/tweet-mobile-module/tweet-store.service';
-import {MobileAuthService} from "@src/app/mobile-auth-service";
+import {MobileAuthService} from '@src/app/mobile-auth-service';
 
 @Component({
     selector: 'app-tweet-scheduled',
@@ -13,13 +13,6 @@ export class TweetScheduledComponent implements OnInit {
     }
 
     ngOnInit() {
-        // this.authService.authState.pipe(tap(auth => {
-        //     if (auth && auth.idToken) {
-        //         console.log('AUTH IS: ', auth);
-        //         this.idToken = auth.idToken;
-        //         this.refresh(auth.idToken);
-        //     }
-        // })).subscribe();
         this.refresh(this.authService.getAuthState().idToken);
     }
 

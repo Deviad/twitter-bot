@@ -31,6 +31,7 @@
     "@fullcalendar/core": "^5.5.1",
     "@nativescript/angular": "~11.0.0",
     "@nativescript/core": "^7.3.0",
+    "@nativescript/datetimepicker": "^2.0.4",
     "@nativescript/theme": "~3.0.0",
     "@types/gapi.auth2": "0.0.54",
     "angularx-social-login": "^3.5.4",

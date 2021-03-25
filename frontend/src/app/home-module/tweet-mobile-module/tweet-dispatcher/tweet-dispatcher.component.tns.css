@@ -1,0 +1,16 @@
+.form {
+    margin-left: 30;
+    margin-right: 30;
+    flex-grow: 2;
+    vertical-align: middle;
+}
+.date-picker {
+    background-color: #cdcccc;
+    border-color: #b1afaf;
+    border-width: 2;
+    margin-top: 10;
+    width:90%;
+    border-radius: 10;
+    color: whitesmoke;
+    vertical-align: middle;
+}

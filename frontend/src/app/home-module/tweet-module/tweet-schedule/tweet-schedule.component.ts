@@ -20,6 +20,7 @@ export class TweetScheduleComponent implements OnInit {
         this.tweetForm = fb.group({
             'message': ['', Validators.compose([this.validateMessage])],
             'scheduledDate': [null, Validators.required],
+            'scheduledTime': [null, Validators.required],
         });
     }
 
