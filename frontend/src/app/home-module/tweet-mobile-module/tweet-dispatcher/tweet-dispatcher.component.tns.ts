@@ -8,6 +8,7 @@ import {getEnvironmentVars} from '@src/utils';
 import {MobileAuthService} from '@src/app/mobile-auth-service';
 import toObject from 'dayjs/plugin/toObject';
 import duration from 'dayjs/plugin/duration';
+import { Dialogs } from '@nativescript/core';
 
 dayjs.extend(toObject);
 dayjs.extend(duration);
@@ -49,6 +50,17 @@ export class TweetDispatcherComponent implements OnInit {
 
     onSubmit({message, scheduledDate: date}: { message: string, scheduledDate: string }, token: string): void {
         console.log('you submitted value:', {message, date});
+
+        if (this.tweetForm.pristine ) {
+            Dialogs.alert('Please fill the form first');
+            return;
+        }
+
+        if (!this.tweetForm.pristine && this.tweetForm.invalid) {
+            Dialogs.alert('Please fill the form properly');
+            return;
+        }
+
         this.ts
             .saveTweet({message, date: dayjs(date).valueOf()}, token)
             .pipe(concatMap(() => this.ts.getScheduledTweets('')))
