@@ -20,14 +20,11 @@ export class TweetScheduleComponent implements OnInit {
         this.tweetForm = fb.group({
             'message': ['', Validators.compose([this.validateMessage])],
             'scheduledDate': [null, Validators.required],
-            'scheduledTime': [null, Validators.required],
         });
     }
 
     validateMessage(c: FormControl) {
         const MESSAGE_REGEX = new RegExp('.{3,}');
-
-        console.log('TEST', MESSAGE_REGEX.test(c.value));
 
         return MESSAGE_REGEX.test(c.value) ? null : {
             validateMessage: {
