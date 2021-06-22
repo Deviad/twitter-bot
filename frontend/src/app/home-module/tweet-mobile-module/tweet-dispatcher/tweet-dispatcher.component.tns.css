@@ -1,3 +1,11 @@
+/*
+NativeScript acceptă DIP-uri (pixeli independenți de dispozitiv),
+pixeli (prin px postfix) și procente (suport parțial pentru lățime,
+înălțime și marjă) ca unități de măsură.
+
+Unitatea de măsurare recomandată de NativeScript este DIP si este cea folosita implicit.
+ */
+
 .form {
     margin-left: 30;
     margin-right: 30;

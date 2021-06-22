@@ -1,6 +1,21 @@
+<!--
+   <GridLayout> este un container de aspect care vă permite să aranjați elementele
+   sale copil într-un mod tabelar. Grila este formată din rânduri, coloane și celule.
+   O celulă poate cuprinde unul sau mai multe rânduri și una sau mai multe coloane.
+   Poate conține mai multe elemente secundare care se pot întinde pe mai multe rânduri
+   și coloane și chiar se suprapun reciproc.
+
+   În mod implicit, <GridLayout> are o coloană și un rând.
+   Puteți adăuga coloane și rânduri configurând coloanele
+   și proprietățile rândurilor.
+   În aceste proprietăți, trebuie să setați numărul de coloane și rânduri și lățimea
+   și înălțimea acestora. Setați numărul de coloane listând lățimile acestora,
+   separate printr-o virgulă. Setați numărul de rânduri enumerând înălțimile lor, separate printr-o virgulă.
+
+
+   -->
 <GridLayout>
-<!--    <Label text="Settings Page" class="h2 text-center">-->
-<!--    </Label>-->
+
     <ListView [items]="getScheduledTweets()"
               style="height:1250px">
         <ng-template let-tweet>

@@ -1,22 +1,37 @@
-    <ScrollView>
-        <StackLayout class="form">
-            <StackLayout class="input-field" orientation="vertical">
-                <Label text="Enter a message" class="t-14 m-l-24"
-                       verticalAlignment="center" style="width: 100%; font-weight: bold"></Label>
-                <TextView
+<!--
+    <StackLayout> este un container de aspect care vă permite să
+    stivați elementele copil vertical (implicit) sau orizontal.
+    Dacă vă aflați cuibărind o mulțime de <StackLayout>, veți obține probabil o performanță mai bună trecând
+    la un <GridLayout> sau <FlexboxLayout>.
+-->
+
+<!--
+    <ScrollView> este o componentă UI care arată o zonă de conținut care poate fi derulată.
+    Conținutul poate fi derulat vertical sau orizontal
+    Poate avea doar un singur element copil.
+-->
+
+
+<ScrollView>
+    <StackLayout class="form">
+        <StackLayout class="input-field" orientation="vertical">
+            <Label text="Enter a message" class="t-14 m-l-24"
+                   verticalAlignment="center" style="width: 100%; font-weight: bold"></Label>
+            <TextView
                     class="input"
                     [formControl]="tweetForm.controls['message']"
-                ></TextView>
-            </StackLayout>
-            <StackLayout class="input-field m-t-24">
-                <Label text="Enter date" class="t-14 m-l-24"
-                       verticalAlignment="center" style="width: 100%; font-weight: bold"></Label>
-                <DateTimePickerFields
-                        hintDate="select date" hintTime="select time"
-                        [formControl]="tweetForm.controls['scheduledDate']"
-                ></DateTimePickerFields>
-
-            </StackLayout>
-            <Button text="Send message" class="btn btn-primary" (tap)="onSubmit(tweetForm.value, auth.getAuthState().idToken)"></Button>
+            ></TextView>
         </StackLayout>
-    </ScrollView>
+        <StackLayout class="input-field m-t-24">
+            <Label text="Enter date" class="t-14 m-l-24"
+                   verticalAlignment="center" style="width: 100%; font-weight: bold"></Label>
+            <DateTimePickerFields
+                    hintDate="select date" hintTime="select time"
+                    [formControl]="tweetForm.controls['scheduledDate']"
+            ></DateTimePickerFields>
+
+        </StackLayout>
+        <Button text="Send message" class="btn btn-primary"
+                (tap)="onSubmit(tweetForm.value, auth.getAuthState().idToken)"></Button>
+    </StackLayout>
+</ScrollView>

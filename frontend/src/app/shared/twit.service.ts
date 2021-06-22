@@ -26,6 +26,11 @@ export interface ISentTweet {
     sentAt: string;
 }
 
+/*
+Pe lângă posibilitatea de a introduce servicii în secțiunea de import a unui modul (ngModule),
+putem folosi adnotarea @Injectable, specificând în ce modul dorim să injectăm serviciul.
+ */
+
 @Injectable({
     providedIn: 'root'
 })
@@ -65,7 +70,7 @@ export class TwitService {
                         } as IScheduledTweet;
                     });
                 }));
-        }),  retryWhen(errors => errors.pipe(delay(10000), take(3),
+        }), retryWhen(errors => errors.pipe(delay(10000), take(3),
             concatMap((error, index) => throwError(error)))));
     }
 

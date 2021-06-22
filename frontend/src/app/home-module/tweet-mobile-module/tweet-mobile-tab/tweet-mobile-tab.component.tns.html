@@ -1,3 +1,38 @@
+<!--
+        <StackLayout> este un container de aspect care vă permite să
+        stivați elementele copil vertical (implicit) sau orizontal.
+        Dacă vă aflați cuibărind o mulțime de <StackLayout>, veți obține probabil o performanță mai bună trecând
+        la un <GridLayout> sau <FlexboxLayout>.
+-->
+<!--
+   <GridLayout> este un container de aspect care vă permite să aranjați elementele
+   sale copil într-un mod tabelar. Grila este formată din rânduri, coloane și celule.
+   O celulă poate cuprinde unul sau mai multe rânduri și una sau mai multe coloane.
+   Poate conține mai multe elemente secundare care se pot întinde pe mai multe rânduri
+   și coloane și chiar se suprapun reciproc.
+
+   În mod implicit, <GridLayout> are o coloană și un rând.
+   Puteți adăuga coloane și rânduri configurând coloanele
+   și proprietățile rândurilor.
+   În aceste proprietăți, trebuie să setați numărul de coloane și rânduri și lățimea
+   și înălțimea acestora. Setați numărul de coloane listând lățimile acestora,
+   separate printr-o virgulă. Setați numărul de rânduri enumerând înălțimile lor, separate printr-o virgulă.
+
+
+   -->
+
+<!--
+    <ScrollView> este o componentă UI care arată o zonă de conținut care poate fi derulată (scrolled).
+    Conținutul poate fi derulat vertical sau orizontal
+    Poate avea doar un singur element copil.
+-->
+
+<!--
+    Diferenta intre src si [src] este ca src seteza atributul in timp ce [src] seteza proprietate.
+    Ca o regula generala daca am ceva dinamic folosesc [src], daca am ceva static folosesc src.
+    Aici am vrut sa arat cum poate fi folosit si [src] cum ar fi src.
+-->
+
 <GridLayout rows="auto,*,auto">
     <ScrollView>
         <StackLayout>

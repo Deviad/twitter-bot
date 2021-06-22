@@ -13,7 +13,6 @@ export const environment = (() => {
             case 'prod':
                 envVars = prodEnvironment;
                 break;
-            // TODO: Add additional environment (e.g. uat) if required.
             default:
                 envVars = devEnvironment;
         }

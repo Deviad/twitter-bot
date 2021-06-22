@@ -11,8 +11,6 @@ import {AuthGuard} from '@src/app/mobile-authguard.service';
 
 TNSFontIconService.debug = true;
 
-// Uncomment and add to NgModule imports if you need to use two-way binding and/or HTTP wrapper
-// import { NativeScriptFormsModule, NativeScriptHttpClientModule } from '@nativescript/angular';
 
 @NgModule({
     declarations: [
@@ -24,6 +22,9 @@ TNSFontIconService.debug = true;
         AppRoutingModule,
         HomeModule,
         NativeScriptHttpClientModule,
+        // forRoot este o functie cu care furnizam o configuratie, in cadrul unui modul care
+        // va fi folosit in toata aplicatia.
+        // Deci, aici cream un singleton cu o configurare anume.
         TNSFontIconModule.forRoot({})
 
     ],

@@ -22,7 +22,13 @@ export class TweetStoreService {
         constructor() {
         this.tweetStore = new BehaviorSubject({scheduledTweets: [], sentTweets: []});
     }
-
+   /*
+        Cand am creat continutul acestei variabile (tweetStore), m-am inspirat la Redux
+        si la functia setState din React.
+        setState preia o functie de callback. Cand construiesc starea curenta creez un obiect care este
+        o copie al starii anterioare si actualizez proprietate dorita.
+        https://redux.js.org/recipes/structuring-reducers/normalizing-state-shape
+    */
     setState(cb: (prevState: Partial<TabState>) => Partial<TabState>) {
             this.tweetStore.next(cb(this.tweetStore.getValue()));
 
