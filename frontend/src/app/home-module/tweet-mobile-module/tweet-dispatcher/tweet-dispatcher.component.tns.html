@@ -31,7 +31,13 @@
             ></DateTimePickerFields>
 
         </StackLayout>
-        <Button text="Send message" class="btn btn-primary"
-                (tap)="onSubmit(tweetForm.value, auth.getAuthState().idToken)"></Button>
+        <ng-template  [ngIf]="tweetForm.invalid" [ngIfElse]="valid">
+            <Button text="Send message" class="btn btn-primary"
+                    (tap)="onSubmit(tweetForm.value, auth.getAuthState().idToken)" isEnabled="false"></Button>
+        </ng-template>
+        <ng-template  #valid>
+            <Button text="Send message" class="btn btn-primary"
+                    (tap)="onSubmit(tweetForm.value, auth.getAuthState().idToken)"></Button>
+        </ng-template>
     </StackLayout>
 </ScrollView>
