@@ -62,15 +62,17 @@ export class TweetDispatcherComponent implements OnInit {
     onSubmit({message, scheduledDate: date}: { message: string, scheduledDate: string }, token: string): void {
         console.log('you submitted value:', {message, date});
 
-        if (this.tweetForm.pristine ) {
-            Dialogs.alert('Please fill the form first');
-            return;
-        }
+        // Way 2 to handle input validation
 
-        if (!this.tweetForm.pristine && this.tweetForm.invalid) {
-            Dialogs.alert('Please fill the form properly');
-            return;
-        }
+        // if (this.tweetForm.pristine ) {
+        //     Dialogs.alert('Please fill the form first');
+        //     return;
+        // }
+        //
+        // if (!this.tweetForm.pristine && this.tweetForm.invalid) {
+        //     Dialogs.alert('Please fill the form properly');
+        //     return;
+        // }
 
         this.ts
             .saveTweet({message, date: dayjs(date).valueOf()}, token)

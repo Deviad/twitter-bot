@@ -21,6 +21,11 @@
                     class="input"
                     [formControl]="tweetForm.controls['message']"
             ></TextView>
+            <Label
+                    [style.color]="tweetForm.controls['message'].invalid ? 'red': '#000000'"
+                    style="margin-left: 20"
+                    [text]="tweetForm.controls['message'].invalid ? 'Min 3 characters' : ' '">
+            </Label>
         </StackLayout>
         <StackLayout class="input-field m-t-24">
             <Label text="Enter date" class="t-14 m-l-24"
@@ -29,15 +34,13 @@
                     hintDate="select date" hintTime="select time"
                     [formControl]="tweetForm.controls['scheduledDate']"
             ></DateTimePickerFields>
-
+            <Label [style.color]="tweetForm.controls['scheduledDate'].invalid ? 'red': '#000000'"
+                   style="margin-left: 20"
+                   [text]="tweetForm.controls['scheduledDate'].invalid ? 'Select a date and a time' : ' '">
+            </Label>
         </StackLayout>
-        <ng-template  [ngIf]="tweetForm.invalid" [ngIfElse]="valid">
-            <Button text="Send message" class="btn btn-primary"
-                    (tap)="onSubmit(tweetForm.value, auth.getAuthState().idToken)" isEnabled="false"></Button>
-        </ng-template>
-        <ng-template  #valid>
-            <Button text="Send message" class="btn btn-primary"
-                    (tap)="onSubmit(tweetForm.value, auth.getAuthState().idToken)"></Button>
-        </ng-template>
+        <Button text="Send message" class="btn btn-primary"
+                (tap)="onSubmit(tweetForm.value, auth.getAuthState().idToken)" [isEnabled]="tweetForm.valid"></Button>
+
     </StackLayout>
 </ScrollView>
