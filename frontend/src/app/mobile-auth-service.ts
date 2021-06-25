@@ -36,10 +36,6 @@ export class MobileAuthService {
         return this.authState.getValue();
     }
 
-    asObservable() {
-        return this.authState.asObservable();
-    }
-
     private init() {
         if (isIOS) {
             GoogleLogin.init({
