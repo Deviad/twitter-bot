@@ -23,6 +23,11 @@ import {NativeScriptDateTimePickerModule} from '@nativescript/datetimepicker/ang
     ],
     bootstrap: [TweetMobileTabComponent],
     exports: [TweetMobileTabComponent],
+    /*
+        The set of schemas that declare elements to be allowed in the NgModule.
+        Elements and properties that are neither Angular components nor directives must be declared in a schema.
+        Allowed value are NO_ERRORS_SCHEMA and CUSTOM_ELEMENTS_SCHEMA.
+    */
     schemas: [NO_ERRORS_SCHEMA],
     providers: [TwitService, TweetStoreService]
 })
